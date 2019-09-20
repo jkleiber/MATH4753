@@ -1,0 +1,77 @@
+---
+title: "Variance of a Binomial"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+# Introduction
+
+We have learnt that the MGF for a binomial random variable is:
+
+$$M_X(t) = (q+pe^t)^n $$
+
+Where $X\sim Bin(n,p)$
+
+# Tasks
+
+Using the moment generating function above prove that 
+
+$$\sigma^2 = npq$$
+
+by answering the tasks below. 
+Use $\LaTeX$ to construct the proof.
+
+## Task 1
+
+Start with 
+
+$$
+\begin{eqnarray}
+E(X) &=& \left . \frac{d M_X(t)}{dt}\right |_{t=0}\\
+&=& npe^t(q + pe^t)^{n-1} |_{t=0}\\
+&=& np(q + p)^{n-1}\\
+&=& np
+\end{eqnarray}
+$$
+
+
+## Task 2
+
+Now find $E(X^2)$
+
+$$
+\begin{eqnarray}
+E(X^2) &=& \frac{d^2M_X(t)}{dt^2} |_{t=0}\\
+&=& n(n-1)pe^t(q+pe^t)^{n-2}pe^t + pe^tn(q+pe^t)^{n-1} |_{t=0}\\
+&=& n(n-1)p(q+p)^{n-2}p + np(q+p)^{n-1} |_{t=0}\\
+&=& n(n-1)p^2 + np\\
+&=& n^2p^2 - np^2 + np\\
+&=& n(np^2 + p - p^2)\\
+&=& n(np^2 + p(1-p))\\
+&=& n(np^2 + pq)\\
+&=& (np)^2 + npq
+\end{eqnarray}
+$$
+
+## Task 3
+
+Find $\sigma^2$ Using the formula $\sigma^2 = E(X^2)-\mu^2$
+
+$$
+\begin{eqnarray}
+\mu &=& E(X) = np\\
+\mu^2 &=& (np)^2\\
+E(X^2) &=& (np)^2 + npq\\
+\sigma^2 &=& E(X^2)-\mu^2\\
+\sigma^2 &=& (np)^2 + npq - (np)^2\\
+\sigma^2 &=& npq
+\end{eqnarray}
+$$

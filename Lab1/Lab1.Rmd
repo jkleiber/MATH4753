@@ -1,0 +1,142 @@
+---
+title: "Lab 1"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    number_sections: no
+  pdf_document:
+    fig_caption: yes
+    toc: yes
+  word_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+Working directory
+```{r}
+getwd()
+```
+
+# Task 2
+```{r}
+ddt=read.csv("DDT.csv") 
+head(ddt)
+```
+
+# Task 3
+* **Qualitative Variables:** RIVER, SPECIES
+* **Quantitative Variables:** MILE, LENGTH, WEIGHT, DDT
+* There are three different SPECIES in the ddt data set, as shown below:
+```{r}
+summary(ddt$SPECIES)
+```
+* Subsetting the data such that WEIGHT > 800 and SPECIES is LMBASS
+```{r}
+with(ddt, ddt[WEIGHT>800 & SPECIES=="LMBASS", ])
+```
+* Subsetting the data such that RIVER is SCM and DDT > 4.0
+```{r}
+with(ddt, ddt[RIVER == "SCM" & DDT > 4.0, ])
+```
+
+## Clicker Questions
+1. 42.8125
+```{r}
+mean(ddt$LENGTH)
+```
+2. 376.5461
+```{r}
+sd(ddt$WEIGHT)
+```
+3. 0
+4. 1.00
+
+# Task 4
+Table of the rivers:
+```{r}
+table(ddt$RIVER)
+```
+
+Color coded barplot of the rivers:
+```{r}
+barplot(table(ddt$RIVER), col = rainbow(4))
+```
+
+Table of river name crossed with fish species:
+```{r}
+table(ddt$RIVER, ddt$SPECIES)
+```
+
+barplot of the rivers crossed with the species of fish:
+```{r}
+barplot(table(ddt$RIVER, ddt$SPECIES))
+```
+
+# Task 5
+Pie chart of fish species
+```{r}
+pie(table(ddt$SPECIES))
+```
+
+Pie chart of the rivers
+```{r}
+pie(table(ddt$RIVER))
+```
+
+# Task 6
+boxplot of DDT
+```{r}
+with(ddt, boxplot(DDT, ylab="DDT", col="Red", notch=TRUE))
+```
+
+boxplot of WEIGHT
+```{r}
+with(ddt, boxplot(WEIGHT,ylab="WEIGHT",col="Green",notch=TRUE))
+```
+
+boxplot of LENGTH
+```{r}
+with(ddt, boxplot(LENGTH,ylab="LENGTH",col="Blue",notch=TRUE))
+```
+
+
+# Task 7
+coplot of LENGTH vs WIDTH given the RIVER
+```{r}
+river_color = with(ddt, ifelse(RIVER=="FCM","Red",
+                        ifelse(RIVER=="LCM","Blue",
+                               ifelse(RIVER=="SCM","Green","Black"))))
+coplot(LENGTH~WEIGHT|RIVER, data = ddt, col = river_color)
+```
+
+coplot of DDT vs WEIGHT given the SPECIES
+```{r}
+fish_color = with(ddt,ifelse(SPECIES=="CCATFISH","Red",
+                        ifelse(SPECIES=="SMBUFFALO","Blue","Green")))
+coplot(DDT~WEIGHT|SPECIES, data = ddt, col = fish_color)
+```
+
+
+# Task 8
+GGPlot Boxplot
+```{r}
+library(ggplot2)
+ggplot(ddt, aes(x = SPECIES, y = WEIGHT, fill = RIVER)) + geom_boxplot() + ggtitle("Justin Kleiber")
+```
+
+GGPlot Violin Plots
+```{r}
+ggplot(ddt, aes(x = RIVER, y = LENGTH, fill = SPECIES)) + geom_violin() + ggtitle("Justin Kleiber")
+```
+
+GGPlot Scatter 
+```{r}
+ggplot(ddt, aes(x = WEIGHT, y = LENGTH, color = SPECIES)) + geom_point() + ggtitle("Justin Kleiber")
+```

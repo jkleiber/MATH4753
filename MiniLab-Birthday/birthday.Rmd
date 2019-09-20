@@ -1,0 +1,70 @@
+---
+title: 'Chapter 3: Probability'
+author: "Justin Kleiber"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+description: "This will help you get into MLR -- learn!"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    highlights: pygments
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+
+```
+
+
+# Introduction
+
+In class we gave the example of calculating the probability of event $A$, at least 2 people having the same birthday when the class size is $n$.
+
+In this minilab we will make a function that will calculate the probability using the formula given in class.
+
+$$P(A^C)=\frac{365\times 364\times \cdots \times (365-n+1)}{365^n}$$
+
+
+This means that the $P(A)$ can be calculated indirectly:
+
+$$P(A)=1-P(A^C)$$
+
+# Questions
+
+Complete `mybirthday()`  function that will create the probability that 2 or more people in a group of size $n$ will have the same birthday. 
+
+More specifically:
+
+> 
+    1. The function will create a table of $n$ and $P(A)$ values
+    2. It will also plot a pie chart of $P(A)$ Vs $n$ where $n\in \{1,\cdots , n_{max}\}$
+    3. The value of n is an upper value of the number of people in the room.
+    
+  
+Please fill in the gaps `###` and make it produce the output shown in the html document.  
+    
+
+
+```{r}
+mybirthday = function(n)
+{
+  # One problem is the size of the numbers
+  # Use log to make calculation manageable lfactorial is the log of the factorial
+  # Below is log(P(AC))
+  logpAc = lfactorial(365)-lfactorial(365-(1:n))-(1:n)*log(365)
+  pAc=exp(logpAc)
+  pA = 1- pAc
+  
+  names(pA)=1:n
+  
+  pie(pA, col=rainbow(n))
+  
+  mat = matrix(c(round(pA, 2)), nr=n, nc=1, byrow=FALSE,
+               dimnames=list("Number in room"=1:n, c("pA")))
+  as.table(mat)
+}
+
+mybirthday(32)
+
+```

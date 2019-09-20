@@ -1,0 +1,70 @@
+---
+title: "Lab 2"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    number_sections: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+```{r}
+getwd()
+```
+
+# Task 2
+```{r}
+mpg_df = read.csv("EPAGAS.csv")
+head(mpg_df)
+```
+
+# Task 3
+Find the mean and variance of z values
+```{r}
+x = mpg_df$MPG
+z = (x - mean(x)) / sd(x)
+
+mean(z)
+var(z)
+```
+
+Find the outlier:
+```{r}
+x[abs(z) > 3]
+```
+
+Lattice Plot:
+```{r}
+library(lattice)
+
+# Color vector
+outlier_colors = ifelse(abs(z)>3, "Red",
+                 ifelse(abs(z)>=2 & abs(z)<=3,"Blue", "Black"))  
+
+
+dotplot(x, col = outlier_colors)
+```
+
+# Task 4
+```{r}
+with(mpg_df, boxplot(MPG, main = "Miles Per Gallon EPA Data", col = "Black", notch = TRUE, horizontal = TRUE))
+```
+
+Chebyshev says the proportion within 2 standard deviations of the mean will be **at least** 1 - 1/K^2. For K = 2, this yields 3/4, or 75%
+
+Actual proportion:
+```{r}
+n = length(x)
+interval = x[abs(z) <= 2]
+ratio = length(interval) / n
+ratio
+```
+96% agrees with the Chebyshev theorem, as it is more than 75%.
+
+The empirical rule says that **approximately** 95% of the distribution should be within two standard deviations of the mean. This corresponds very well - it is only off by 1%! The Empirical rule is valid in this case because, as shown by the boxplot, the distribution is unimodal and symmetrical. This fulfills the assumptions made by the empirical rule.

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1568963016878.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "256856025",
+    "id" : "7A8EA29F",
+    "lastKnownWriteTime" : 1568963522,
+    "last_content_update" : 1568963522348,
+    "path" : "C:/Users/jklei/Google Drive/School/Fall 2019/MATH4573/JKleiberPkg/R/obinom.R",
+    "project_path" : "R/obinom.R",
+    "properties" : {
+        "cursorPosition" : "19,28",
+        "scrollLine" : "1",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

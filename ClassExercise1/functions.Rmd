@@ -1,0 +1,89 @@
+---
+title: 'Writing Functions: Class exercise'
+author: "Wayne Stewart"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment='ws#')
+```
+
+# Introduction
+>
+We will be making R functions in this course and in fact the first project will require you to make a number of them.
+
+```{r,eval=FALSE}
+functionname <- function(x,y,z, ...){
+  R expressions
+  last line released to the command line
+}
+```
+
+
+# Task
+
+>
+You will need to make a function that takes a vector of quantitative data as input and then calculates the standard deviation.
+
+## Specifically
+
+Use the following formula:
+
+$$s = \sqrt{\frac{\sum_{i=1}^n (x_i-\bar{x})^2}{n-1}}$$
+
+
+
+
+1. Fill in the code below:
+
+```{r sd}
+
+mysd = function(x){ # x is a vector
+  variance = sum((x - mean(x))^2) / (length(x) - 1)
+  s = sqrt(variance)
+  s
+}
+
+```
+
+2. Run the function with the following input. Notice the chunk option `eval=FALSE` -- you will need to remove this once your function is made.
+
+```{r test1}
+L=1:20
+mysd(L)
+
+```
+
+3. Now compare with the built in `R` function `sd()` by calculating the standard deviation of `L` : that is calculate `sd(L)`. Put in R chunk below
+
+```{r compare}
+sd(L)
+```
+
+
+4. This is important: Alter your function so that the last line before the `}` is a `list` function containing both the standard deviation and the variance.
+
+
+```{r sd2}
+
+mysd = function(x){ # x is a vector
+  variance = sum((x - mean(x))^2) / (length(x) - 1)
+  s = sqrt(variance)
+  list("std_deviation" = s, "variance" = variance)
+}
+
+```
+
+Invoke the adjusted function by first removing the chunk option `eval=FALSE`
+
+```{r}
+mysd(x=L)
+```
+
+
+5. Upload the html document to CANVAS
+

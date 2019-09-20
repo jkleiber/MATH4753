@@ -1,0 +1,23 @@
+---
+title: "ILAS-Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ILAS-Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This is how the bull's eye function works:
+
+```{r}
+ILAS2019::bullseye()
+```
+

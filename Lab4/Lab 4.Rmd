@@ -1,0 +1,297 @@
+---
+title: "Lab 4: MATH 4753"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: spacelab
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+
+First, the working directory is confirmed
+
+```{r}
+getwd()
+```
+
+# Task 2
+Now the spruce tree data will be imported
+
+```{r}
+spruce.df = read.csv("SPRUCE.csv")
+tail(spruce.df)
+```
+
+# Task 3
+First, a lowess smoother scatter plot is made to see the trend in data
+```{r}
+# Load the s20x library and make a lowess smoother scatter plot
+library(s20x)
+trendscatter(Height~BHDiameter, f = 0.5, data = spruce.df)
+```
+
+A linear model is created. Residuals and fitted values are found from this model.
+```{r}
+# Make a linear model 
+spruce.lm = with(spruce.df, lm(Height~BHDiameter))
+
+# Find height residuals
+height.res = residuals(spruce.lm)
+
+# Find fitted values for height
+height.fit = fitted(spruce.lm)
+```
+
+The residuals are plotted against the fitted values.
+```{r}
+# Plot residuals vs fitted values
+plot(height.fit, height.res)
+trendscatter(height.fit, height.res)
+```
+
+This curve has a steep positive slope that turns into a steep negative slope. In the original curve, there was a steep positive slope followed by a less steep positive slope.  
+
+Next, a residual plot is made using the plot() function
+```{r}
+# Make a residual plot
+plot(spruce.lm, which =1)
+```
+
+The normality of the linear model can be tested using the normcheck function
+```{r}
+# Test the normality of the linear model
+normcheck(spruce.lm, shapiro.wilk = TRUE)
+```
+
+The P-value for the Shapiro-Wilk test is 0.29. The null hypothesis is that the data is normally distributed
+
+The mean of the residuals is near 0, as shown below.
+```{r}
+mean(height.res)
+```
+
+Since the mean value of the residuals is 0, and the Shapiro-Wilk test stated the normal distribution of residuals is plausible, applying a straight line to this data is a valid approach.
+
+# Task 4
+First, a quadratic line will be made to try to get a better fit on the data
+```{r}
+# Fit a quadratic line to the data
+quad.lm=lm(Height~BHDiameter + I(BHDiameter^2), data=spruce.df)
+```
+
+Now the quadratic line is plotted on top of the scatter plot
+```{r}
+# Plot height vs diameter with the quadratic trendline overlaid
+with(spruce.df, plot(BHDiameter, Height))
+
+# Make the quadratic trendline
+quad_trend = function(x){
+  quad.lm$coef[1] +quad.lm$coef[2]*x  + quad.lm$coef[3]*x^2
+}
+
+# Add the trendline
+curve(quad_trend, lwd = 2, col = "green", add = TRUE)
+```
+
+The fitted values can now be found, and the residuals will be plotted against them
+```{r}
+# Fitted values for the quadratic trend
+quad.fit = fitted(quad.lm)
+
+# Plot the residuals against the fitted quadratic function
+plot(quad.fit, residuals(quad.lm))
+```
+
+Now the quadratic line can be tested to see if the residuals are normally distributed
+```{r}
+# Test the normality of the quadratic line
+normcheck(quad.lm, shapiro.wilk = TRUE)
+```
+
+The P-value of this test is 0.684, which is higher than the last test on the straight line model. This indicates the quadratic line fits the data better than the straight line.
+
+# Task 5
+The quadratic line is summarized below:
+```{r}
+summary(quad.lm)
+```
+
+This shows that $\hat{\beta}_0 = 0.860896$, $\hat{\beta}_1 = 1.469592$, and $\hat{\beta}_2 = -0.027457$.
+
+The confidence intervals for the model are as follows:
+```{r}
+# Get the confidence intervals of the model coefficients
+ciReg(quad.lm)
+```
+
+Using the estimates for beta, we can make the following equation  
+$$
+y = \hat{\beta}_0 + \hat{\beta}_{1}x + \hat{\beta}_{2}x^2
+$$
+which simplifies to:
+$$
+y = 0.860896 + 1.469592x -0.027457x^2
+$$
+
+This function is used by the predict function in R to predict height values from diameter values. This is shown below:
+```{r}
+# Predict height from diameter
+predict(quad.lm, data.frame(BHDiameter=c(15,18,20)))
+```
+
+The straight line model has the following predictions:
+```{r}
+# Predict height from diameter
+predict(spruce.lm, data.frame(BHDiameter=c(15,18,20)))
+```
+
+For these diameters, the quadratic line predicts higher values than the straight model.  
+
+To see how well each model fits the data, the summary should be considered. Below are the summaries for each model
+```{r}
+# Straight line model
+summary.lm(spruce.lm)
+
+# quadratic line
+summary.lm(quad.lm)
+```
+
+As seen above, the multiple R-squared for quad.lm is 0.7741, which is higher than the 0.6569 of the straight line's multiple R-squared.  
+
+R allows for an easy way to find the adjusted R-squared:
+```{r}
+# Adjusted R-squared for the straight line
+summary.lm(spruce.lm)$adj.r.squared
+
+# Adjusted R-squared for the quadratic curve
+summary.lm(quad.lm)$adj.r.squared
+```
+
+The quadratic line has a higher adjusted R-squared, implying it has a better fit to the data than the straight line estimate.
+
+In this case, multiple R-squared means how closely the model fits to the data. In other words, it is how close the residuals are to the trend line.  
+
+The quadratic line thus explains the most variability in the height, as it fits the data the best. The straight line is not able to do adapt as well to the variability.   
+
+anova() output for the two models is below:
+```{r}
+# Analysis of the straight line
+anova(spruce.lm)
+
+# Analysis of the quadratic line
+anova(quad.lm)
+```
+
+Next, TSS, MSS and RSS will be found:
+```{r}
+# Find the total sum of squares
+TSS = with(spruce.df, sum((Height-mean(Height))^2))
+TSS
+```
+```{r}
+# Find the model sum of squares
+MSS = with(spruce.df, sum((quad.fit-mean(Height))^2))
+MSS
+```
+```{r}
+# Find the residual sum of squares
+RSS=with(spruce.df, sum((Height-quad.fit)^2))
+RSS
+```
+
+And so, MSS/TSS is:
+```{r}
+MSS / TSS
+```
+
+which is the R-squared value for the quadratic line!
+
+# Task 6
+Unusual points are found below using a cooks plot:
+```{r}
+cooks20x(quad.lm)
+```
+
+Cooks distance is a measure of how much a model changes if a specific data point is removed from the sample. The plot itself shows the impact each observation has on the model, which can help identify influential data points.  
+
+From this it is seen that the quadratic line is most influenced by data point 24. If data point 24 is removed, and a new model is created, it can be seen how the model changes.
+```{r}
+# Make a new quadratic line without data point 24
+quad2.lm = lm(Height~BHDiameter + I(BHDiameter^2), data = spruce.df[-24,])
+
+# Summary of the new model
+summary(quad2.lm)
+```
+
+The summary of the old quadratic line is below for reference:
+```{r}
+summary(quad.lm)
+```
+
+As seen, the new quadratic line is a better fit to the new data than the old model. It can be concluded that data point 24 was too influential on the data set as a whole, which caused disturbance of the model. This could mean data point 24 is an outlier.
+
+# Task 7
+
+Proof:
+$$
+line \space 1: y = \beta_0 + \beta_1x\\
+line \space 2: y = \beta_0 + \delta + (\beta_1 + \beta_2)x \\
+y_k = \beta_0 + \beta_1x_k = \beta_0 + \delta + (\beta_1 + \beta_2)x_k \\
+\beta_0 + \beta_1x_k = \beta_0 + \delta + (\beta_1 + \beta_2)x_k \\
+0 = \delta + \beta_2x_k\\
+\delta = -\beta_2x_k
+$$
+So:
+$$
+line \space 2: y = \beta_0 + \delta + (\beta_1 + \beta_2)x \\ 
+\delta = -\beta_2x_k \\
+y = \beta_0 - \beta_2x_k + \beta_1x + \beta_2x \\
+y = \beta_0 + \beta_1x + \beta_2(x - x_k) \space for \space x > x_k
+$$
+To account for the line before $x_k$:
+$$
+line 1: y = \beta_0 + \beta_1x\\
+and \\
+y = \beta_0 + \beta_1x + \beta_2(x - x_k) \space for \space x > x_k \\
+so\\
+y = \beta_0 + \beta_1x \space for \space x \leq x_k
+$$
+Therefore, the equation $y = \beta_0 + \beta_1x + \beta_2(x - x_k)I(x > x_k)$ holds.
+
+```{r}
+## piecewise linear model in R
+## Model y = b0 + b1x + b2(x-xk)*(x>xk)
+## You will need to change the code appropriately
+sp2.df=within(spruce.df, X<-(BHDiameter-18)*(BHDiameter>18)) 
+
+lmp=lm(Height~BHDiameter + X,data=sp2.df)
+tmp=summary(lmp)
+
+myPlot = function(x,coef){
+  coef[1]+coef[2]*(x) + coef[3]*(x-18)*(x-18>0)
+}
+
+# Plot the piecewise regression
+plot(spruce.df,main="Piecewise regression")
+curve(myPlot(x,coef=tmp$coefficients[,"Estimate"] ),add=TRUE, lwd=2,col="Blue")
+abline(v=18)
+text(18,16,paste("R sq.=",round(tmp$r.squared,4) ))
+```
+
+# Task 8
+```{r}
+library(JKleiberPkg)
+with(spruce.df, plotLM(spruce.df, BHDiameter, Height, Height, "Linear Model Plot"))
+```
+
+This function plots all of the data points on a graph and colors it. It also shows a trendline for a straight line model of the data with shading.
+
+
