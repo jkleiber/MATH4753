@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Q 1
 a. $1-0.9212 = 0.0788$  
-b. $1 - .74550.2545  
+b. $1 - .7455 = 0.2545$  
 c. Novice
 
 ## Q 2
