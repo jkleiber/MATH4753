@@ -25,14 +25,25 @@ b. $1 - .7455 = 0.2545$
 c. Novice
 
 ## Q 2
-```{r}
-plot(1:10)
-```
-
+a. $\frac{50}{100} = 0.5$  
+b. $\frac{900 - 9}{900} = 0.99$
+c. 
+$$
+\begin{eqnarray}
+  P(u|T) &=& \frac{P(u)P(T|u)}{P(T)}\\
+   &=& \frac{0.1*0.5}{0.059}\\
+   &=& 0.8475
+\end{eqnarray}
+$$
 
 ## Q 3
+Given: there are $k$ sets of elements with $n$ values in each set.
+If $k=1$, then there are $n_1$ ways to take a sample from this set.  
+For $k=2$, there are $n_1$ ways to sample an element from the first set, as seen above. Then for each of these possible elements, there are $n_2$ ways to sample from the second set. Thus there are $n_1$ lists of the $n_2$ ways to sample from the second set - this yields a total of $n_1n_2$ total ways to sample from two sets.   
+And it follows that for $k$ sets, this expands further as more "lists" are added. Therefore, for $k$ sets there are $n_1n_2n_3 ... n_k$ ways to sample a single element from each of the sets.
 
 ## Q 4
-
+For $N$ items, there are $N$ ways to choose one item. For arranging $k$ items from a set of size $N$ in a list, we have $N$ possible choices for the first list element. For the next one we have $N-1$ possibilites. And so on down to $N-k+1$ possibilities. Each of these amounts can be represented as one of $k$ sets. Using the multiplication rule, which states there are $n_1n_2n_3 ... n_k$ ways to sample $k$ elements from $k$ sets, we can form the equation $N(N-1)(N-2)...(N-k+1)$ for the number of ways to arrange $k$ values from the set we are choosing from.
 
 ## Q 5
+
