@@ -2800,13 +2800,13 @@ div.tocify {
 
 <h1 class="title toc-ignore">Ass 2: Template</h1>
 <h4 class="author">Your name</h4>
-<h4 class="date">Friday, September 20, 2019</h4>
+<h4 class="date">Sunday, September 22, 2019</h4>
 
 </div>
 
 
-<div id="questions" class="section level1">
-<h1>Questions</h1>
+<div id="questions1717" class="section level1">
+<h1>Questions{17/17}</h1>
 <div id="q-1" class="section level2">
 <h2>Q 1</h2>
 <ol style="list-style-type: lower-alpha">
@@ -2840,10 +2840,250 @@ And it follows that for <span class="math inline">\(k\)</span> sets, this expand
 </div>
 <div id="q-4" class="section level2">
 <h2>Q 4</h2>
-<p>For <span class="math inline">\(N\)</span> items, there are <span class="math inline">\(N\)</span> ways to choose one item. For arranging <span class="math inline">\(k\)</span> items from a set of size <span class="math inline">\(N\)</span> in a list, we have <span class="math inline">\(N\)</span> possible choices for the first list element. For the next one we have <span class="math inline">\(N-1\)</span> possibilites. And so on down to <span class="math inline">\(N-k+1\)</span> possibilities. Each of these amounts can be represented as one of <span class="math inline">\(k\)</span> sets. Using the multiplication rule, which states there are <span class="math inline">\(n_1n_2n_3 ... n_k\)</span> ways to sample <span class="math inline">\(k\)</span> elements from <span class="math inline">\(k\)</span> sets, we can form the equation <span class="math inline">\(N(N-1)(N-2)...(N-k+1)\)</span> for the number of ways to arrange values from the set we are choosing from.</p>
+<p>For <span class="math inline">\(N\)</span> items, there are <span class="math inline">\(N\)</span> ways to choose one item. For arranging <span class="math inline">\(k\)</span> items from a set of size <span class="math inline">\(N\)</span> in a list, we have <span class="math inline">\(N\)</span> possible choices for the first list element. For the next one we have <span class="math inline">\(N-1\)</span> possibilites. And so on down to <span class="math inline">\(N-k+1\)</span> possibilities. Each of these amounts can be represented as one of <span class="math inline">\(k\)</span> sets. Using the multiplication rule, which states there are <span class="math inline">\(n_1n_2n_3 ... n_k\)</span> ways to sample <span class="math inline">\(k\)</span> elements from <span class="math inline">\(k\)</span> sets, we can form the equation <span class="math inline">\(N(N-1)(N-2)...(N-k+1)\)</span> for the number of ways to arrange <span class="math inline">\(k\)</span> values from the set we are choosing from.</p>
 </div>
 <div id="q-5" class="section level2">
 <h2>Q 5</h2>
+<p>The number of ways to arrange <span class="math inline">\(N\)</span> elements is <span class="math inline">\(N!\)</span>. For the i-th partition with <span class="math inline">\(n_i\)</span> elements, there are <span class="math inline">\(n_i!\)</span> ways to arrange these elements. Using the multiplicative rule, the number of possible ways to arrange values inside k partitions is <span class="math inline">\(n_1!n_2!...n_k!\)</span>. By doing <span class="math inline">\(\frac{N!}{n_1!n_2!...n_k!}\)</span> all the possible arrangements of the N elements into the k partitions is accounted for. The division is done to avoid double counting.</p>
+</div>
+<div id="q-6" class="section level2">
+<h2>Q 6</h2>
+<p>Using the partitions rule, we can partition elements into two groups: chosen and not chosen. The number of elements that are chosen is <span class="math inline">\(n\)</span> and the number of elements not chosen are <span class="math inline">\(N-n\)</span>. Using the equation from the partitions rule, this results in <span class="math inline">\(\frac{N!}{n!(N-n)!}\)</span></p>
+</div>
+<div id="q-7" class="section level2">
+<h2>Q 7</h2>
+<ol style="list-style-type: lower-alpha">
+<li>The sum of the probabilities is verified below</li>
+</ol>
+<pre class="r"><code>.09 + .3 + .37 + .2 + .04</code></pre>
+<pre><code>## [1] 1</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Given the probability distribution, the probability of 3 or 4 houses having dust mites is calculated</li>
+</ol>
+<pre class="r"><code>0.2 + 0.04</code></pre>
+<pre><code>## [1] 0.24</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Likewise the probability of having less than 2 houses above the threshold is calculated</li>
+</ol>
+<pre class="r"><code>0.09 + 0.3</code></pre>
+<pre><code>## [1] 0.39</code></pre>
+</div>
+<div id="q-8" class="section level2">
+<h2>Q 8</h2>
+<ol style="list-style-type: lower-alpha">
+<li>All probabilites are between 0 and 1 inclusive. Also:</li>
+</ol>
+<pre class="r"><code>0.17 + 0.10 + 0.11 + 0.11 + 0.10 + 0.10 + 0.07 + 0.05 + 0.03 + 0.02 + 0.02 + 0.02 + 0.02 + 0.02 + 0.01 + 0.01 + 0.01 + 0.01 + 0.01 + 0.005 + 0.005</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>all the probabilities sum to 1.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>For P(Y&gt;=10), we can sum all the probabilities for the values greater or equal to 10:</li>
+</ol>
+<pre class="r"><code>0.02 + 0.02 + 0.02 + 0.02 + 0.01 + 0.01 + 0.01 + 0.01 + 0.01 + 0.005 + 0.005</code></pre>
+<pre><code>## [1] 0.14</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Forming the probability distribution into a vector and then performing the calculation <span class="math inline">\(\mu = \sum_i^n{y_iP(y_i)}\)</span></li>
+</ol>
+<pre class="r"><code>y = 0:20
+p = c(0.17, 0.10, 0.11, 0.11, 0.10, 0.10, 0.07, 0.05, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.005, 0.005)
+mu = sum(p*y)
+mu</code></pre>
+<pre><code>## [1] 4.655</code></pre>
+<p>Likewise, the variance is <span class="math inline">\(\sigma^2 = \sum_i^n{(y_i-\mu)^2P(y_i)}\)</span></p>
+<pre class="r"><code>variance = sum((y-mu)^2 * p)
+variance</code></pre>
+<pre><code>## [1] 19.85597</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>The standard deviation can be found from the variance</li>
+</ol>
+<pre class="r"><code>sqrt(variance)</code></pre>
+<pre><code>## [1] 4.456004</code></pre>
+<p>According to Chebyshev’s rule, at least <span class="math inline">\(1 - \frac{1}{k^2}\)</span> of a distribution will be k standard deviations from the mean. To get 75% of the distribution, we must choose <span class="math inline">\(k = 2\)</span> such that <span class="math inline">\(\mu \pm 2\sigma\)</span>. This gives us the interval for which at least 75% of the data must lie: <span class="math inline">\(4.655 \pm 8.912\)</span></p>
+</div>
+<div id="q-9" class="section level2">
+<h2>Q 9</h2>
+<ol style="list-style-type: lower-alpha">
+<li>Using <code>dbinom</code> we can find the chance of there being 10 foreign nationals among 25 PhD students</li>
+</ol>
+<pre class="r"><code>dbinom(10, 25, 0.7)</code></pre>
+<pre><code>## [1] 0.001324897</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Using <code>pbinom</code> we can find the probability of there being 5 or fewer PhD foreign nationals</li>
+</ol>
+<pre class="r"><code>pbinom(5, 25, 0.7)</code></pre>
+<pre><code>## [1] 3.457444e-07</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>For a binomial distribution, the mean is <span class="math inline">\(\mu = np\)</span> where p is the probability of a success. In this case, <span class="math inline">\(\mu = 25(0.7) = 17.5\)</span>.<br />
+The equation for variance in a binomial distribution is <span class="math inline">\(\sigma^2 = npq\)</span>. For this data, <span class="math inline">\(\sigma^2 = 25(0.7)(0.3) = 5.25\)</span>. Standard deviation therefore is <span class="math inline">\(\sigma = \sqrt{5.25} = 2.2913\)</span>.</p></li>
+<li><p>These results show that given a sample of 25 PhD students, it is expected that around 17 of them are foreign nationals. In fact, using Chebyshev’s theorem, 75% of such samples have between 13 and 22 foreign nationals.</p></li>
+</ol>
+</div>
+<div id="q-10" class="section level2">
+<h2>Q 10</h2>
+<ol style="list-style-type: lower-alpha">
+<li>Using <code>dmultinom</code> we can find the likelihood of all tracks getting 5 train assignments:</li>
+</ol>
+<pre class="r"><code>dmultinom(c(5,5,5,5,5,5,5,5,5,5), size = 50, prob = c(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1))</code></pre>
+<pre><code>## [1] 4.912046e-07</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>This problem is now a binomial distribution - using <code>pbinom</code> it can be found if track #1 is underutilized or not by finding <span class="math inline">\(P(y_1 &lt; 2)\)</span> where <span class="math inline">\(y_1\)</span> is the occurence of a train being on track 1.</li>
+</ol>
+<pre class="r"><code>pbinom(1,50,prob = 0.1)</code></pre>
+<pre><code>## [1] 0.03378586</code></pre>
+</div>
+<div id="q-11" class="section level2">
+<h2>Q 11</h2>
+<ol style="list-style-type: lower-alpha">
+<li><p>This is a geometric distribution problem, so the probability distribution of Y is: <span class="math display">\[
+P(Y) = pq^{Y-1} = 0.4(0.6)^{Y-1}
+\]</span></p></li>
+<li><p>E(Y) is the mean of the probability distribution. This is <span class="math inline">\(\mu = \frac{1}{p} = \frac{1}{0.4} = 2.5\)</span>. This means we can expect to conduct 2-3 interviews before interviewing someone who says they think a product is green for reasons other than packaging or label certification.</p></li>
+<li><p><span class="math inline">\(P(Y=1)\)</span> can be calculated in R using <code>dgeom</code></p></li>
+</ol>
+<pre class="r"><code>dgeom(1, 0.4)</code></pre>
+<pre><code>## [1] 0.24</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><span class="math inline">\(P(Y&gt;2)\)</span> can be calculated similarly with <code>pgeom</code></li>
+</ol>
+<pre class="r"><code>1 - pgeom(2, 0.4)</code></pre>
+<pre><code>## [1] 0.216</code></pre>
+</div>
+<div id="q-12" class="section level2">
+<h2>Q 12</h2>
+<ol style="list-style-type: lower-alpha">
+<li><p>The expected value for a hypergeometric distribution is <span class="math inline">\(E(X) = \frac{nr}{N}\)</span>. With <span class="math inline">\(n = 10\)</span>, <span class="math inline">\(N = 209\)</span>, and <span class="math inline">\(r = 8\)</span> that gives an <span class="math inline">\(E(X) = \frac{80}{209} = 0.3828\)</span>. That means less than one of the facilities in such a sample would be expected to treat waste on site</p></li>
+<li><p>The probability that 4 of 10 of the sample will treat waste on site can be found with <code>dhyper</code>:</p></li>
+</ol>
+<pre class="r"><code>dhyper(4, 8, 201, 10)</code></pre>
+<pre><code>## [1] 0.0001688459</code></pre>
+</div>
+<div id="q-13" class="section level2">
+<h2>Q 13</h2>
+<ol style="list-style-type: lower-alpha">
+<li><p>The variance of a Poisson distribution is <span class="math inline">\(\sigma^2 = \lambda = E(Y)\)</span>. So the variance is simply <span class="math inline">\(0.03\)</span>.</p></li>
+<li><p>This Poisson assumption is plausible if the event of casualties are rare and if casualties are equally likely to happen independent of time or other casualties.</p></li>
+<li><p>The probability for no casualties over a three year period can be calculated using <code>dpois</code>:</p></li>
+</ol>
+<pre class="r"><code>dpois(0, 0.03)</code></pre>
+<pre><code>## [1] 0.9704455</code></pre>
+</div>
+<div id="q-14" class="section level2">
+<h2>Q 14</h2>
+<ol style="list-style-type: lower-alpha">
+<li><p>The probability density function must sum to 1 over the interval. So <span class="math display">\[
+\begin{eqnarray}
+  1 &amp;=&amp; \int_{0}^{1}c(2-y)dy\\
+  1 &amp;=&amp; \int_{0}^{1}(2c - cy)dy\\
+  1 &amp;=&amp; 2c\int_{0}^{1}dy - c\int_{0}^{1}ydy\\
+  1 &amp;=&amp; 2c[1-0] - c\frac{1}{2}[1^2-0^2]\\
+  1 &amp;=&amp; 2c - \frac{c}{2}\\
+  1 &amp;=&amp; \frac{3c}{2}\\
+  =&gt; c &amp;=&amp; \frac{2}{3}
+\end{eqnarray}
+\]</span></p></li>
+<li><p>The cumulative distribution function is as follows:<br />
+<span class="math display">\[
+F(y) = \int_{-\infty}^{y}f(t)dt\\
+\]</span> <span class="math display">\[
+F(y) = \begin{cases}
+     0 &amp; y &lt; 0 \\
+     \frac{4y - y^2}{3} &amp; 0 \leq y \leq 1\\
+     1 &amp; y &gt; 1
+   \end{cases}
+\]</span></p></li>
+<li><p>From part b, <span class="math inline">\(F(0.4) = \frac{4(0.4) - (0.4)^2}{3} = 0.48\)</span></p></li>
+<li><p>This is simply <span class="math inline">\(F(0.6) - F(0.1)\)</span>. I used R to calculate this below:</p></li>
+</ol>
+<pre class="r"><code>F = function(y) {
+  val = 4*y/3 - (y^2)/3
+}
+
+F(0.6) - F(0.1)</code></pre>
+<pre><code>## [1] 0.55</code></pre>
+</div>
+<div id="q-15" class="section level2">
+<h2>Q 15</h2>
+<ol style="list-style-type: lower-alpha">
+<li>The mean of this function is equal to the expected value: <span class="math display">\[
+\begin{eqnarray}
+E(y) &amp;=&amp; \int_{-\infty}^{\infty}yf(y)dy \\
+E(y) &amp;=&amp; \int_{-5}^{5}\frac{3y(25 - y^2)}{500}dy \\
+E(y) &amp;=&amp; \frac{3}{500}\int_{-5}^{5}25y - y^3dy \\
+E(y) &amp;=&amp; \frac{3}{500}[\frac{25y^2}{2} - \frac{y^4}{4}]_{-5}^{5}\\
+E(y) &amp;=&amp; \frac{3}{500}(\frac{25(25)}{2} - \frac{625}{4})\\
+E(y) &amp;=&amp; \frac{3}{500}(\frac{625}{4})\\
+E(y) &amp;=&amp; 0.9375
+\end{eqnarray}
+\]</span></li>
+</ol>
+<p>With <span class="math inline">\(\mu = 0.9375\)</span> the variance can be calculated from <span class="math inline">\(E(y^2)\)</span> by the formula <span class="math inline">\(\sigma^2 = E(y^2) - \mu^2\)</span></p>
+<p><span class="math display">\[
+\begin{eqnarray}
+E(y^2) &amp;=&amp; \int_{-\infty}^{\infty}y^2f(y)dy \\
+E(y^2) &amp;=&amp; \int_{-5}^{5}(\frac{3y^2(25 - y^2)}{500})^2dy \\
+E(y^2) &amp;=&amp; \frac{9}{500^2}\int_{-5}^{5}(25y^2 - y^4)^2dy \\
+E(y^2) &amp;=&amp; \frac{9}{500^2}\int_{-5}^{5}(y^8 - 50y^6 + 625y^4)dy \\
+E(y^2) &amp;=&amp; \frac{9}{500^2}[\frac{y^9}{9} - \frac{50y^7}{7} + \frac{625y^5}{5}]_{-5}^5 \\
+E(y^2) &amp;=&amp; 3.571429
+\end{eqnarray}
+\]</span></p>
+<p>So the variance is <span class="math inline">\(\sigma^2 = 3.571429 - 0.9375^2 = 2.692522\)</span></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>The above mean and variance are calculated in minutes. For an hour, these values simply need to be divided by 60: <span class="math display">\[
+\mu_{hr} = \frac{0.9375}{60} = 0.015625\\
+\sigma^2_{hr} = \frac{2.692522}{60} = 0.04487537
+\]</span></p></li>
+<li><p>Likewise, we will multiply the original answer by 60 to convert to seconds: <span class="math display">\[
+\mu_{sec} = 0.9375*60 = 56.25\\
+\sigma^2_{sec} = 2.692522*60 = 161.5513
+\]</span></p></li>
+</ol>
+</div>
+<div id="q-16" class="section level2">
+<h2>Q 16</h2>
+<ol style="list-style-type: lower-alpha">
+<li><code>pnorm</code> can help find the chance that a sample has a alkalinity above 45 milligrams per liter, as shown below</li>
+</ol>
+<pre class="r"><code>1 - pnorm(45, mean = 50, sd = 3.2)</code></pre>
+<pre><code>## [1] 0.9409149</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Similarly, we can see the probability of a river sample being below 55 mg/liter:</li>
+</ol>
+<pre class="r"><code>pnorm(55, mean = 50, sd = 3.2)</code></pre>
+<pre><code>## [1] 0.9409149</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Using 2 <code>pnorm</code> functions we can find the likelihood of a range of values:</li>
+</ol>
+<pre class="r"><code>pnorm(52, mean = 50, sd = 3.2) - pnorm(51, mean = 50, sd = 3.2)</code></pre>
+<pre><code>## [1] 0.1113448</code></pre>
+</div>
+<div id="q-17" class="section level2">
+<h2>Q 17</h2>
+<ol style="list-style-type: lower-alpha">
+<li>We continue to use <code>pnorm</code> to evaluate crash data for the range 500-700 points:</li>
+</ol>
+<pre class="r"><code>pnorm(700, mean = 605, sd = 185) - pnorm(500, mean = 605, sd = 185)</code></pre>
+<pre><code>## [1] 0.4110396</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>For 400-500 points:</li>
+</ol>
+<pre class="r"><code>pnorm(500, mean = 605, sd = 185) - pnorm(400, mean = 605, sd = 185)</code></pre>
+<pre><code>## [1] 0.1512568</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>For less than 850 points:</li>
+</ol>
+<pre class="r"><code>pnorm(850, mean = 605, sd = 185)</code></pre>
+<pre><code>## [1] 0.9073023</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>For greater than 1000 points</li>
+</ol>
+<pre class="r"><code>1 - pnorm(1000, mean = 605, sd = 185)</code></pre>
+<pre><code>## [1] 0.01637499</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>We use <code>qnorm</code> to look at the value exceeded by the cars in the top 10% (90th percentile):</li>
+</ol>
+<pre class="r"><code>qnorm(0.9, mean = 605, sd = 185)</code></pre>
+<pre><code>## [1] 842.087</code></pre>
 </div>
 </div>
 

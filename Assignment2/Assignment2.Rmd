@@ -17,7 +17,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Questions{}
+# Questions{17/17}
 
 ## Q 1
 a. $1-0.9212 = 0.0788$  
@@ -46,4 +46,247 @@ And it follows that for $k$ sets, this expands further as more "lists" are added
 For $N$ items, there are $N$ ways to choose one item. For arranging $k$ items from a set of size $N$ in a list, we have $N$ possible choices for the first list element. For the next one we have $N-1$ possibilites. And so on down to $N-k+1$ possibilities. Each of these amounts can be represented as one of $k$ sets. Using the multiplication rule, which states there are $n_1n_2n_3 ... n_k$ ways to sample $k$ elements from $k$ sets, we can form the equation $N(N-1)(N-2)...(N-k+1)$ for the number of ways to arrange $k$ values from the set we are choosing from.
 
 ## Q 5
+The number of ways to arrange $N$ elements is $N!$. For the i-th partition with $n_i$ elements, there are $n_i!$ ways to arrange these elements. Using the multiplicative rule, the number of possible ways to arrange values inside k partitions is $n_1!n_2!...n_k!$. By doing $\frac{N!}{n_1!n_2!...n_k!}$ all the possible arrangements of the N elements into the k partitions is accounted for. The division is done to avoid double counting.
+
+## Q 6
+Using the partitions rule, we can partition elements into two groups: chosen and not chosen. The number of elements that are chosen is $n$ and the number of elements not chosen are $N-n$. Using the equation from the partitions rule, this results in $\frac{N!}{n!(N-n)!}$
+
+## Q 7
+a. The sum of the probabilities is verified below
+```{r}
+.09 + .3 + .37 + .2 + .04
+```
+
+b. Given the probability distribution, the probability of 3 or 4 houses having dust mites is calculated
+```{r}
+0.2 + 0.04
+```
+
+c. Likewise the probability of having less than 2 houses above the threshold is calculated
+```{r}
+0.09 + 0.3
+```
+
+
+## Q 8
+a. All probabilites are between 0 and 1 inclusive. Also:
+```{r}
+0.17 + 0.10 + 0.11 + 0.11 + 0.10 + 0.10 + 0.07 + 0.05 + 0.03 + 0.02 + 0.02 + 0.02 + 0.02 + 0.02 + 0.01 + 0.01 + 0.01 + 0.01 + 0.01 + 0.005 + 0.005
+```
+
+all the probabilities sum to 1.
+
+b. For P(Y>=10), we can sum all the probabilities for the values greater or equal to 10:
+```{r}
+0.02 + 0.02 + 0.02 + 0.02 + 0.01 + 0.01 + 0.01 + 0.01 + 0.01 + 0.005 + 0.005
+```
+
+c. Forming the probability distribution into a vector and then performing the calculation $\mu = \sum_i^n{y_iP(y_i)}$
+```{r}
+y = 0:20
+p = c(0.17, 0.10, 0.11, 0.11, 0.10, 0.10, 0.07, 0.05, 0.03, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.005, 0.005)
+mu = sum(p*y)
+mu
+```
+
+Likewise, the variance is $\sigma^2 = \sum_i^n{(y_i-\mu)^2P(y_i)}$
+```{r}
+variance = sum((y-mu)^2 * p)
+variance
+```
+
+d. The standard deviation can be found from the variance
+```{r}
+sqrt(variance)
+```
+
+According to Chebyshev's rule, at least $1 - \frac{1}{k^2}$ of a distribution will be k standard deviations from the mean. To get 75% of the distribution, we must choose $k = 2$ such that $\mu \pm 2\sigma$. This gives us the interval for which at least 75% of the data must lie: $4.655 \pm 8.912$
+
+## Q 9
+a. Using `dbinom` we can find the chance of there being 10 foreign nationals among 25 PhD students
+```{r}
+dbinom(10, 25, 0.7)
+```
+
+b. Using `pbinom` we can find the probability of there being 5 or fewer PhD foreign nationals
+```{r}
+pbinom(5, 25, 0.7)
+```
+
+c. For a binomial distribution, the mean is $\mu = np$ where p is the probability of a success. In this case, $\mu = 25(0.7) = 17.5$.  
+The equation for variance in a binomial distribution is $\sigma^2 = npq$. For this data, $\sigma^2 = 25(0.7)(0.3) = 5.25$. Standard deviation therefore is $\sigma = \sqrt{5.25} = 2.2913$.  
+
+d. These results show that given a sample of 25 PhD students, it is expected that around 17 of them are foreign nationals. In fact, using Chebyshev's theorem, 75% of such samples have between 13 and 22 foreign nationals.  
+
+## Q 10
+a. Using `dmultinom` we can find the likelihood of all tracks getting 5 train assignments:
+```{r}
+dmultinom(c(5,5,5,5,5,5,5,5,5,5), size = 50, prob = c(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1))
+```
+
+b. This problem is now a binomial distribution - using `pbinom` it can be found if track #1 is underutilized or not by finding $P(y_1 < 2)$ where $y_1$ is the occurence of a train being on track 1.
+```{r}
+pbinom(1,50,prob = 0.1)
+```
+
+## Q 11
+a. This is a geometric distribution problem, so the probability distribution of Y is:
+$$
+P(Y) = pq^{Y-1} = 0.4(0.6)^{Y-1}
+$$
+
+b. E(Y) is the mean of the probability distribution. This is $\mu = \frac{1}{p} = \frac{1}{0.4} = 2.5$. This means we can expect to conduct 2-3 interviews before interviewing someone who says they think a product is green for reasons other than packaging or label certification.  
+
+c. $P(Y=1)$ can be calculated in R using `dgeom`
+```{r}
+dgeom(1, 0.4)
+```
+
+d. $P(Y>2)$ can be calculated similarly with `pgeom`
+```{r}
+1 - pgeom(2, 0.4)
+```
+
+## Q 12
+a. The expected value for a hypergeometric distribution is $E(X) = \frac{nr}{N}$. With $n = 10$, $N = 209$, and $r = 8$ that gives an $E(X) = \frac{80}{209} = 0.3828$. That means less than one of the facilities in such a sample would be expected to treat waste on site  
+
+b. The probability that 4 of 10 of the sample will treat waste on site can be found with `dhyper`:
+```{r}
+dhyper(4, 8, 201, 10)
+```
+
+## Q 13
+a. The variance of a Poisson distribution is $\sigma^2 = \lambda = E(Y)$. So the variance is simply $0.03$.  
+
+b. This Poisson assumption is plausible if the event of casualties are rare and if casualties are equally likely to happen independent of time or other casualties.
+
+c. The probability for no casualties over a three year period can be calculated using `dpois`:
+```{r}
+dpois(0, 0.03)
+```
+
+
+## Q 14
+a. The probability density function must sum to 1 over the interval. So 
+$$
+\begin{eqnarray}
+  1 &=& \int_{0}^{1}c(2-y)dy\\
+  1 &=& \int_{0}^{1}(2c - cy)dy\\
+  1 &=& 2c\int_{0}^{1}dy - c\int_{0}^{1}ydy\\
+  1 &=& 2c[1-0] - c\frac{1}{2}[1^2-0^2]\\
+  1 &=& 2c - \frac{c}{2}\\
+  1 &=& \frac{3c}{2}\\
+  => c &=& \frac{2}{3}
+\end{eqnarray}
+$$
+
+b. The cumulative distribution function is as follows:  
+$$
+F(y) = \int_{-\infty}^{y}f(t)dt\\
+$$
+$$
+F(y) = \begin{cases}
+        0 & y < 0 \\
+        \frac{4y - y^2}{3} & 0 \leq y \leq 1\\
+        1 & y > 1
+      \end{cases}
+$$
+
+c. From part b, $F(0.4) = \frac{4(0.4) - (0.4)^2}{3} = 0.48$  
+
+d. This is simply $F(0.6) - F(0.1)$. I used R to calculate this below:
+```{r}
+F = function(y) {
+  val = 4*y/3 - (y^2)/3
+}
+
+F(0.6) - F(0.1)
+```
+
+
+## Q 15
+a. The mean of this function is equal to the expected value:
+$$
+\begin{eqnarray}
+E(y) &=& \int_{-\infty}^{\infty}yf(y)dy \\
+E(y) &=& \int_{-5}^{5}\frac{3y(25 - y^2)}{500}dy \\
+E(y) &=& \frac{3}{500}\int_{-5}^{5}25y - y^3dy \\
+E(y) &=& \frac{3}{500}[\frac{25y^2}{2} - \frac{y^4}{4}]_{-5}^{5}\\
+E(y) &=& \frac{3}{500}(\frac{25(25)}{2} - \frac{625}{4})\\
+E(y) &=& \frac{3}{500}(\frac{625}{4})\\
+E(y) &=& 0.9375
+\end{eqnarray}
+$$
+
+With $\mu = 0.9375$ the variance can be calculated from $E(y^2)$ by the formula $\sigma^2 = E(y^2) - \mu^2$
+
+$$
+\begin{eqnarray}
+E(y^2) &=& \int_{-\infty}^{\infty}y^2f(y)dy \\
+E(y^2) &=& \int_{-5}^{5}(\frac{3y^2(25 - y^2)}{500})^2dy \\
+E(y^2) &=& \frac{9}{500^2}\int_{-5}^{5}(25y^2 - y^4)^2dy \\
+E(y^2) &=& \frac{9}{500^2}\int_{-5}^{5}(y^8 - 50y^6 + 625y^4)dy \\
+E(y^2) &=& \frac{9}{500^2}[\frac{y^9}{9} - \frac{50y^7}{7} + \frac{625y^5}{5}]_{-5}^5 \\
+E(y^2) &=& 3.571429
+\end{eqnarray}
+$$
+
+So the variance is $\sigma^2 = 3.571429 - 0.9375^2 = 2.692522$  
+
+b. The above mean and variance are calculated in minutes. For an hour, these values simply need to be divided by 60:
+$$
+\mu_{hr} = \frac{0.9375}{60} = 0.015625\\
+\sigma^2_{hr} = \frac{2.692522}{60} = 0.04487537
+$$
+
+c. Likewise, we will multiply the original answer by 60 to convert to seconds:
+$$
+\mu_{sec} = 0.9375*60 = 56.25\\
+\sigma^2_{sec} = 2.692522*60 = 161.5513
+$$
+
+
+## Q 16
+a. `pnorm` can help find the chance that a sample has a alkalinity above 45 milligrams per liter, as shown below
+```{r}
+1 - pnorm(45, mean = 50, sd = 3.2)
+```
+
+b. Similarly, we can see the probability of a river sample being below 55 mg/liter:
+```{r}
+pnorm(55, mean = 50, sd = 3.2)
+```
+
+c. Using 2 `pnorm` functions we can find the likelihood of a range of values:
+```{r}
+pnorm(52, mean = 50, sd = 3.2) - pnorm(51, mean = 50, sd = 3.2)
+```
+
+## Q 17
+a. We continue to use `pnorm` to evaluate crash data for the range 500-700 points:
+```{r}
+pnorm(700, mean = 605, sd = 185) - pnorm(500, mean = 605, sd = 185)
+```
+
+b. For 400-500 points:
+```{r}
+pnorm(500, mean = 605, sd = 185) - pnorm(400, mean = 605, sd = 185)
+```
+
+c. For less than 850 points:
+```{r}
+pnorm(850, mean = 605, sd = 185)
+```
+
+d. For greater than 1000 points
+```{r}
+1 - pnorm(1000, mean = 605, sd = 185)
+```
+
+e. We use `qnorm` to look at the value exceeded by the cars in the top 10% (90th percentile):
+```{r}
+qnorm(0.9, mean = 605, sd = 185)
+```
+
+
 
