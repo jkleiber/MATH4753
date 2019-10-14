@@ -1,0 +1,460 @@
+---
+title: "Lab 6: MATH 4753"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: spacelab
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+
+First, the working directory is confirmed
+
+```{r}
+getwd()
+```
+
+# Task 2
+```{r}
+# Create a 2x2 matrix of plots
+layout(matrix(1:4, nr=2,nc=2))
+
+# Plot the prob. density for A
+curve(dnorm(x, mean=10,sd=4),xlim=c(10-4*3,10+4*3))
+# Plot the prob. density for B
+curve(dnorm(x, mean=10,sd=2),xlim=c(10-2*3,10+2*3))
+# Plot the prob. density for C
+curve(dnorm(x, mean=5,sd=10),xlim=c(5-10*3,5+10*3))
+# Plot the prob. density for D
+curve(dnorm(x, mean=5,sd=0.5),xlim=c(5-0.5*3,5+0.5*3))
+```
+
+- Region 1
+```{r}
+# X and Y points of the highlight
+xcurve = seq(2,4, length=1000)
+ycurve = dnorm(xcurve)
+
+# Plot the density function
+curve(dnorm(x), xlim=c(-3, 3))
+
+# Show the fill
+polygon(c(2, xcurve, 4), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(1 - pnorm(2), 4)
+text(2, max(dnorm(2)+dnorm(4)), paste("P:", prob))
+```
+
+- Region 2
+```{r}
+left = 1
+right = 5
+mu = 4
+sigma = 2
+# X and Y points of the highlight
+xcurve = seq(left,right, length=1000)
+ycurve = dnorm(xcurve, mu, sigma)
+
+# Plot the density function
+curve(dnorm(x, mu, sigma), xlim=c(mu-3*sigma, mu+3*sigma))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pnorm(right, mu, sigma) - pnorm(left, mu, sigma), 4)
+text((left+right)/2, (dnorm(left, mu, sigma)+dnorm(right, mu, sigma))/2, paste("P:", prob))
+```
+
+- Region 3
+```{r}
+right = 10
+mu = 10
+sigma = 4
+left = mu - 3*sigma
+
+# X and Y points of the highlight
+xcurve = seq(left,right, length=1000)
+ycurve = dnorm(xcurve, mu, sigma)
+
+# Plot the density function
+curve(dnorm(x, mu, sigma), xlim=c(mu-3*sigma, mu+3*sigma))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pnorm(right, mu, sigma), 4)
+text((left+right)/2, (dnorm(left, mu, sigma)+dnorm(right, mu, sigma))/2, paste("P:", prob))
+```
+
+- Region 4
+```{r}
+right = -2
+mu = -2
+sigma = 0.5
+left = -3
+
+# X and Y points of the highlight
+xcurve = seq(left,right, length=1000)
+ycurve = dnorm(xcurve, mu, sigma)
+
+# Plot the density function
+curve(dnorm(x, mu, sigma), xlim=c(mu-3*sigma, mu+3*sigma))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pnorm(right, mu, sigma) - pnorm(left, mu, sigma), 4)
+text((left+right)/2, (dnorm(left, mu, sigma)+dnorm(right, mu, sigma))/2, paste("P:", prob))
+```
+
+# Task 3
+```{r}
+# First gamma
+curve(dgamma(x,shape=1,scale=1),xlim=c(0,10),ylim=c(0,1),col="Red",lwd=2,
+ylab="Gamma density", main="Three Gamma Density Functions")
+
+curve(dgamma(x,shape=3,scale=1),xlim=c(0,10),ylim=c(0,1),add=TRUE,lwd=2)
+
+curve(dgamma(x,shape=5,scale=1),xlim=c(0,10),ylim=c(0,1),add=TRUE, col="Blue",lwd=2)
+
+legend(7, 1, legend=c("Gamma 1", "Gamma 2", "Gamma 3"), col = c("Red", "Black", "Blue"), lty = 1)
+```
+
+- Region 1
+```{r}
+shape = 3
+scale = 2
+left = 2
+right = 5
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dgamma(xcurve, shape, scale)
+
+# Plot the density function
+curve(dgamma(x, shape, scale), xlim=c(0, 6))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pgamma(right, shape, scale) - pgamma(left, shape, scale), 4)
+text((left+right)/2, (dgamma(left, shape, scale)+dgamma(right, shape, scale))/2, paste("P:", prob))
+```
+
+- Region 2
+```{r}
+shape = 6
+scale = 3
+left = 1
+right = 4
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dgamma(xcurve, shape, scale)
+
+# Plot the density function
+curve(dgamma(x, shape, scale), xlim=c(0, 6))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pgamma(right, shape, scale) - pgamma(left, shape, scale), 4)
+text((left+right)/2, (dgamma(left, shape, scale)+dgamma(right, shape, scale))/2, paste("P:", prob))
+```
+
+- Region 3
+```{r}
+shape = 2
+scale = 4
+left = 3
+right = 6 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dgamma(xcurve, shape, scale)
+
+# Plot the density function
+curve(dgamma(x, shape, scale), xlim=c(0, 6))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pgamma(right, shape, scale) - pgamma(left, shape, scale), 4)
+text((left+right)/2, (dgamma(left, shape, scale)+dgamma(right, shape, scale))/2, paste("P:", prob))
+```
+
+# Task 4
+```{r}
+# Create a 2x2 matrix of plots
+layout(matrix(1:4, nr=2,nc=2))
+
+# Chi-Square Plot 1
+curve(dchisq(x,df=1),xlim=c(0,10),col="Red",lwd=2,
+ylab="Chisq density", main="df=1")
+
+# Chi-Square Plot 2
+curve(dchisq(x,df=2),xlim=c(0,10),col="Blue",lwd=2,
+ylab="Chisq density", main="df=2")
+
+# Chi-Square Plot 3
+curve(dchisq(x,df=4),xlim=c(0,10),col="Green",lwd=2,
+ylab="Chisq density", main="df=4")
+
+# Chi-Square Plot 4
+curve(dchisq(x,df=20),xlim=c(0,45),col="Orange",lwd=2,
+ylab="Chisq density", main="df=20")
+```
+
+- Region 1
+```{r}
+df = 2
+left = 2
+right = 4 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dchisq(xcurve, df)
+
+# Plot the density function
+curve(dchisq(x, df), xlim=c(0, 10))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pchisq(right, df) - pchisq(left, df), 4)
+text((left+right)/2, (dchisq(left, df)+dchisq(right, df))/2, paste("P:", prob))
+```
+
+- Region 2
+```{r}
+df = 3
+left = 3
+right = 5 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dchisq(xcurve, df)
+
+# Plot the density function
+curve(dchisq(x, df), xlim=c(0, 12))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pchisq(right, df) - pchisq(left, df), 4)
+text((left+right)/2, (dchisq(left, df)+dchisq(right, df))/2, paste("P:", prob))
+```
+
+- Region 3
+```{r}
+df = 20
+left = 10
+right = 21 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dchisq(xcurve, df)
+
+# Plot the density function
+curve(dchisq(x, df), xlim=c(3, 45))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pchisq(right, df) - pchisq(left, df), 4)
+text((left+right)/2, (dchisq(left, df)+dchisq(right, df))/2, paste("P:", prob))
+```
+
+# Task 5
+```{r}
+# Create a 2x2 matrix of plots
+layout(matrix(1:4, nr=2,nc=2))
+
+# Weibull 1
+curve(dweibull(x, 1, 2), main="shape = 1, scale = 2", lwd=2, xlim=c(0, 10), col="Pink")
+
+# Weibull 2
+curve(dweibull(x, 4, 1), main="shape = 4, scale = 1", lwd=2, xlim=c(0, 3), col="Purple")
+
+# Weibull 3
+curve(dweibull(x, 2, 4), main="shape = 2, scale = 4", lwd=2, xlim=c(0, 10), col="Red")
+
+# Weibull 4
+curve(dweibull(x, 5, 3), main="shape = 5, scale = 3", lwd=2, xlim=c(0, 6), col="Green")
+```
+
+- Shape = 5, Scale = 2, $P(1 < Y < 3)$
+```{r}
+shape = 5
+scale = 2
+left = 1
+right = 3 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dweibull(xcurve, shape, scale)
+
+# Plot the density function
+curve(dweibull(x, shape, scale), xlim=c(0, 6))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pweibull(right, shape, scale) - pweibull(left, shape, scale), 4)
+text((left+right)/2, (dweibull(left, shape, scale)+dweibull(right, shape, scale))/2, paste("P:", prob))
+```
+
+- Shape = 3, Scale = 8, $P(4 < Y < 10)$
+```{r}
+shape = 3
+scale = 8
+left = 4
+right = 10 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dweibull(xcurve, shape, scale)
+
+# Plot the density function
+curve(dweibull(x, shape, scale), xlim=c(0, 20))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pweibull(right, shape, scale) - pweibull(left, shape, scale), 4)
+text((left+right)/2, (dweibull(left, shape, scale)+dweibull(right, shape, scale))/2, paste("P:", prob))
+```
+
+- Shape = 1, Scale = 3, $P(1 < Y < 3)$
+```{r}
+shape = 2
+scale = 3
+left = 1
+right = 3 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dweibull(xcurve, shape, scale)
+
+# Plot the density function
+curve(dweibull(x, shape, scale), xlim=c(0, 9))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pweibull(right, shape, scale) - pweibull(left, shape, scale), 4)
+text((left+right)/2, (dweibull(left, shape, scale)+dweibull(right, shape, scale))/2, paste("P:", prob))
+```
+
+# Task 6
+```{r}
+# Create a 2x2 matrix of plots
+layout(matrix(1:4, nr=2,nc=2))
+
+# 5, 10
+curve(dbeta(x, 5, 10), main="Shape1 = 5, Shape2 = 10", col = "DarkGreen", lwd = 2)
+
+# 10, 2
+curve(dbeta(x, 10, 2), main="Shape1 = 10, Shape2 = 2", col = "SkyBlue", lwd = 2)
+
+# 8, 3
+curve(dbeta(x, 8, 3), main="Shape1 = 8, Shape2 = 3", col = "Brown", lwd = 2)
+
+# 2, 4
+curve(dbeta(x, 2, 4), main="Shape1 = 2, Shape2 = 4", col = "Gray", lwd = 2)
+```
+
+- Shape1 = 3, Shape2 = 7, $P(0.5 < Y < 0.75)$
+```{r}
+shape1 = 3
+shape2 = 7
+left = 0.5
+right = 0.75 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dbeta(xcurve, shape1, shape2)
+
+# Plot the density function
+curve(dbeta(x, shape1, shape2))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pbeta(right, shape1, shape2) - pbeta(left, shape1, shape2), 4)
+text((left+right)/2, (dbeta(left, shape1, shape2)+dbeta(right, shape1, shape2))/2, paste("P:", prob))
+```
+
+
+- Shape1 = 5, Shape2 = 1, $P(0.25 < Y < 0.5)$
+```{r}
+shape1 = 5
+shape2 = 1
+left = 0.25
+right = 0.5 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dbeta(xcurve, shape1, shape2)
+
+# Plot the density function
+curve(dbeta(x, shape1, shape2))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pbeta(right, shape1, shape2) - pbeta(left, shape1, shape2), 4)
+text((left+right)/2, (dbeta(left, shape1, shape2)+dbeta(right, shape1, shape2))/2, paste("P:", prob))
+```
+
+- Shape1 = 8, Shape2 = 8, $P(Y < 0.45)$
+```{r}
+shape1 = 8
+shape2 = 8
+left = 0
+right = 0.45 
+
+# X and Y points of the highlight
+xcurve = seq(left, right, length=1000)
+ycurve = dbeta(xcurve, shape1, shape2)
+
+# Plot the density function
+curve(dbeta(x, shape1, shape2))
+
+# Show the fill
+polygon(c(left, xcurve, right), c(0, ycurve, 0), col="Green")
+
+# Calculate and show probability
+prob = round(pbeta(right, shape1, shape2), 4)
+text((left+right)/2, (dbeta(left, shape1, shape2)+dbeta(right, shape1, shape2))/2, paste("P:", prob))
+```
+
+# Task 7
+```{r}
+library(JKleiberPkg)
+JKleiberPkg::myncurve(mu = 10, sigma = 5, a = 6)
+```
+

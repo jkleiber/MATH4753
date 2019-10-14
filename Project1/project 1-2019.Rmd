@@ -1,0 +1,275 @@
+---
+title: "Project 1"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: show
+    csl: biomed-central.csl
+    df_print: paged
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    number_sections: yes
+    theme: journal
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  pdf_document:
+    df_print: kable
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    toc: yes
+    toc_depth: 4
+#bibliography: project.bib
+abstract: Software development hinges on code being free of defects, however defects are expensive to find. Four methods of detecting defects are proposed in this project and analyzed using probability theory and R. Finally, a function is made to quickly show the results of such analysis.
+---
+
+<center>
+
+![Justin Kleiber](justin.jpg "My Picture"){ width=20% }
+
+</center>
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+## Problem and Data
+Software developers need to efficiently determine where their code may contain defects. To find such defects, different algorithms have been proposed. The SWDEFECTS file contains data showing each method's prediction of whether or not a piece of code has a defect or not, along with the ground-truth label associated with the same piece of code.
+
+## Summary Table 
+
+Summary tables will be needed to understand the performance of the algorithms. Below, an example summary table is generated to show the convention used in this project
+
+```{r}
+library(knitr)
+library(kableExtra)
+no_defect = c("a", "c")
+yes_defect = c("b", "d")
+summ = matrix(c(no_defect, yes_defect), nrow=2, ncol = 2)
+colnames(summ) <- c("No Defect", "Defect")
+rownames(summ) <- c("No Predicted Defect", "Predicted Defect")
+summ_tab = as.table(summ)
+kable_styling(kable(summ_tab))
+```
+
+
+ 
+## Important Formulae
+
+1. Accuracy
+2. Detection rate
+3. False alarm rate
+4. Precision
+
+Equation for Accuracy:
+$$
+P(correct) = \frac{a + d}{a + b + c +d}
+$$
+
+Equation for Detection Rate:
+$$
+P(predict \space defect | defective) = \frac{d}{b+d}
+$$
+
+Formula for False Alarm Rate:
+$$
+P(predict \space defect | not \space defective) = \frac{c}{a + c}
+$$
+
+Formula for Precision
+$$
+P(defective | predict \space defect) = \frac{d}{c+d}
+$$
+
+
+# Formula Implementation in R
+Using the above definitions, R functions are created to implement these formulae  
+
+Accuracy
+```{r accuracy}
+acc=function(a,b,c,d)
+{
+  accuracy = (a+d) / (a+b+c+d)
+  accuracy
+}
+```
+
+Detection Rate  
+```{r detecton}
+detect=function(b,d)
+{
+  POD = d / (b+d)
+  POD
+}
+```
+
+False alarm rate 
+```{r alarm}
+falarm=function(a,c)
+{
+  alarm = c / (a+c)
+  alarm
+}
+```
+
+Precision
+```{r precision}
+prec=function(c,d)
+{
+  precision = d / (c+d)
+  precision
+}
+```
+
+
+# Algorithm Performance
+For each of the four algorithms proposed for detecting defects, a summary table and barplot showing the algorithm's performance is constructed below.  
+
+First, the software defects data is loaded:  
+```{r}
+swd=read.csv("SWDEFECTS.csv")
+head(swd)
+```
+
+
+For the Lines of Code algorithm:
+```{r}
+LOC = with(swd, table(predict.loc.50, defect))
+LOC2 = addmargins(LOC)
+LOC2
+barplot(LOC, beside = TRUE, leg = TRUE)
+```
+
+
+For the Cyclomatic Complexity algorithm:
+```{r}
+CC = with(swd, table(predict.vg.10, defect))
+CC2 = addmargins(CC)
+CC2
+barplot(CC, beside = TRUE, leg = TRUE)
+```
+
+
+For the Essential Complexity algorithm:
+```{r}
+EC = with(swd, table(predict.evg.14.5, defect))
+EC2 = addmargins(EC)
+EC2
+barplot(EC, beside = TRUE, leg = TRUE)
+```
+
+
+For the Design Complexity algorithm:
+```{r}
+DC = with(swd, table(predict.ivg.9.2, defect))
+DC2 = addmargins(DC)
+DC2
+barplot(DC, beside = TRUE, leg = TRUE)
+```
+
+
+
+# Algorithm Comparison
+
+First, the a,b,c, and d values are retrieved from the summary tables above:
+```{r}
+# Lines of Code
+LOC.a = LOC["no", "FALSE"]
+LOC.b = LOC["no", "TRUE"]
+LOC.c = LOC["yes", "FALSE"]
+LOC.d = LOC["yes", "TRUE"]
+
+# Cyclomatic Complexity
+CC.a = CC["no", "FALSE"]
+CC.b = CC["no", "TRUE"]
+CC.c = CC["yes", "FALSE"]
+CC.d = CC["yes", "TRUE"]
+
+# Essential Complexity
+EC.a = EC["no", "FALSE"]
+EC.b = EC["no", "TRUE"]
+EC.c = EC["yes", "FALSE"]
+EC.d = EC["yes", "TRUE"]
+
+# Design Complexity
+DC.a = DC["no", "FALSE"]
+DC.b = DC["no", "TRUE"]
+DC.c = DC["yes", "FALSE"]
+DC.d = DC["yes", "TRUE"]
+```
+
+Then, accuracy, detection rate, false alarm rate, and precision can all be calculated for each algorithm
+```{r}
+# Lines of Code
+LOC.acc = acc(LOC.a, LOC.b, LOC.c, LOC.d)
+LOC.detect = detect(LOC.b, LOC.d)
+LOC.falarm = falarm(LOC.a, LOC.c)
+LOC.prec = prec(LOC.c, LOC.d)
+
+# Cyclomatic Complexity
+CC.acc = acc(CC.a, CC.b, CC.c, CC.d)
+CC.detect = detect(CC.b, CC.d)
+CC.falarm = falarm(CC.a, CC.c)
+CC.prec = prec(CC.c, CC.d)
+
+# Essential Complexity
+EC.acc = acc(EC.a, EC.b, EC.c, EC.d)
+EC.detect = detect(EC.b, EC.d)
+EC.falarm = falarm(EC.a, EC.c)
+EC.prec = prec(EC.c, EC.d)
+
+# Design Complexity
+DC.acc = acc(DC.a, DC.b, DC.c, DC.d)
+DC.detect = detect(DC.b, DC.d)
+DC.falarm = falarm(DC.a, DC.c)
+DC.prec = prec(DC.c, DC.d)
+```
+
+This can then be converted into four performance vectors:
+```{r}
+acc_vec = as.numeric(c(LOC.acc, CC.acc, EC.acc, DC.acc))
+detect_vec = as.numeric(c(LOC.detect, CC.detect, EC.detect, DC.detect))
+falarm_vec = as.numeric(c(LOC.falarm, CC.falarm, EC.falarm, DC.falarm))
+prec_vec = as.numeric(c(LOC.prec, CC.prec, EC.prec, DC.prec))
+```
+
+From these calculations a table can be made.
+```{r}
+library(knitr)
+library(kableExtra)
+perf_data = matrix(c(acc_vec, detect_vec, falarm_vec, prec_vec), nrow = 4, ncol = 4)
+rownames(perf_data) <- c("Lines of Code", "Cyclomatic Complexity", "Essential Complexity", "Design Complexity")
+colnames(perf_data) <- c("Accuracy", "Detection Rate", "False-Alarm Rate", "Precision")
+perf_data = as.table(perf_data)
+kable_styling(kable(perf_data)) # Make a nice looking table
+```
+
+The following function, `mybar` is used to round a table to a certain precision and then generate a barplot that assists in comparing the methods for detecting defects in software.
+```{r}
+mybar = function(tab, acc) {
+  tab = round(tab, acc)
+  barplot(tab, beside = TRUE, leg = TRUE, col = rainbow(nrow(tab)))
+  list("table_out" = tab)
+}
+```
+
+
+Applying `mybar` to the table generated above results in the following barplot and table:
+```{r}
+mybar(perf_data, 3)
+```
+
+
+
+
