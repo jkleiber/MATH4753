@@ -1,0 +1,360 @@
+---
+title: "Lab 11: MATH 4753"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: spacelab
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+
+First, the working directory is confirmed
+
+```{r}
+getwd()
+```
+
+# Task 2
+
+Here is some data on washer diameters:
+```{r}
+d=c(5.0581, 4.9707, 5.0893, 4.9334, 4.9777, 5.0285, 4.8555, 4.9565, 
+4.9769, 4.9722, 4.999, 4.9925, 4.9686, 5.0662, 4.9239, 4.9781, 
+5.0485, 5.0014, 4.9957, 5.0195, 5.0118, 4.9928, 5.0361, 5.0185, 
+4.9879)
+```
+
+Now we will form some confidence intervals from this sample using the function below
+
+```{r}
+mean_ci = function(data, alpha){
+  s = sd(data)
+  y = mean(data)
+  n = length(data)
+  t = qt(1 - alpha/2, n-1)
+  
+  ci = c(y - t*s/sqrt(n), y + t*s/sqrt(n))
+  ci
+}
+```
+
+
+For 95%:
+```{r}
+mean_ci(d, 0.05)
+```
+
+For 90%:
+```{r}
+mean_ci(d, 0.1)
+```
+
+For 80%:
+```{r}
+mean_ci(d, 0.2)
+```
+
+For 50%:
+```{r}
+mean_ci(d, 0.5)
+```
+
+R also has a function called `t.test` that can be used to obtain the confidence interval. For 80%:
+```{r}
+t = t.test(d, conf.level = 0.8)
+t$conf.int
+```
+
+The confidence intervals for variance uses a different equation. So a different formula is shown below to assist in calculating the data in R.
+```{r}
+var_ci = function(data, alpha)
+{
+  n = length(data)
+  s = var(data)
+  chi_lower = qchisq(1-alpha/2, n-1)
+  chi_upper = qchisq(alpha/2, n-1)
+  
+  lower = ((n-1)*s)/chi_lower
+  upper = ((n-1)*s)/chi_upper
+  
+  ci = c(lower, upper)
+  ci
+}
+```
+
+For 95%:
+```{r}
+var_ci(d, 0.05)
+```
+
+For 90%:
+```{r}
+var_ci(d, 0.1)
+```
+
+For 80%:
+```{r}
+var_ci(d, 0.2)
+```
+
+For 50%:
+```{r}
+var_ci(d, 0.5)
+```
+
+
+# Task 3
+
+Here is some fish data:
+```{r}
+blue=c(21.65, 17.48, 20.1, 21.57, 14.82, 19.17, 21.08, 18.23, 22.93, 
+15.66, 20.89, 21.66, 18.5, 20.59, 18.63, 18.91, 19.53, 17.7, 16.5, 19.0)
+
+snapper=c(31.65, 27.48, 30.1, 31.57, 24.82, 29.17, 31.08, 28.23, 32.93, 
+25.66, 30.89, 31.66, 28.5, 30.59, 28.63)
+
+length(blue)
+length(snapper)
+```
+
+Since both samples are small, the small sample formula for calculating a confidence interval for $\mu_1 - \mu_2$ will be used.
+
+```{r}
+diff_mean_ci = function(data1, data2, alpha)
+{
+  # data 1
+  y1 = mean(data1)
+  n1 = length(data1)
+  var1 = var(data1)
+  
+  # data 2
+  y2 = mean(data2)
+  n2 = length(data2)
+  var2 = var(data2)
+  
+  t = qt(1-alpha/2, n1+n2-2)
+  
+  Sp = ((n1-1)*var1 + (n2-1)*var2)/(n1 + n2 - 2)
+  lower = y1 - y2 - t*sqrt(Sp*(1/n1 + 1/n2))
+  upper = y1 - y2 + t*sqrt(Sp*(1/n1 + 1/n2))
+  
+  ci = c(lower, upper)
+  ci
+}
+```
+
+For 95% confidence of $\mu_{blue} - \mu_{snapper}$:
+```{r}
+diff_mean_ci(blue, snapper, 0.05)
+```
+
+For 95% confidence of $\mu_{snapper} - \mu_{blue}$:
+```{r}
+diff_mean_ci(snapper, blue, 0.05)
+```
+
+This means that 95% of samples from the population of snappers and blue fish will contain an average snapper length 8 - 11 inches greater than the average blue fish length.   
+
+The above calculations can be verified using a T test:  
+
+For 95%:
+```{r}
+t.test(snapper, blue, var.equal = TRUE, conf.level = 0.95)$conf.int
+```
+
+For 85%:
+```{r}
+t.test(snapper, blue, var.equal = TRUE, conf.level = 0.85)$conf.int
+```
+
+For 75%:
+```{r}
+t.test(snapper, blue, var.equal = TRUE, conf.level = 0.75)$conf.int
+```
+
+For 25%:
+```{r}
+t.test(snapper, blue, var.equal = TRUE, conf.level = 0.25)$conf.int
+```
+
+As the confidence level lowers, the interval shrinks. At 0% confidence, this interval would simply be a point estimate, as 0% of samples are likely to have the exact difference in means.
+
+# Task 4
+
+Here is some exam data:
+```{r}
+Exam1=c(40.98, 59.36, 46.69, 41.8, 61.63, 65.31, 62.96, 60.21, 56.89, 
+78.41, 53.44, 75.2, 60.54, 52.43, 41.41, 70.79, 73.55, 55.65, 
+61.43, 63.84, 58.07, 53.79, 54.45, 67.18, 44.46)
+Exam2=c(50.22, 66.19, 58.75, 51.88, 66.61, 70.86, 74.25, 70.23, 69.55, 
+87.18, 63.62, 81.7, 70.5, 66.02, 51.35, 80.92, 85.65, 65.44, 
+74.37, 75.28, 67.86, 59.92, 64.42, 73.57, 57.1)
+
+length(Exam1)
+length(Exam2)
+```
+
+Since $n < 30$, the smaller sample CI equation will be used.  
+
+```{r}
+dep_mean_ci = function(data1, data2, alpha)
+{
+  data = data1-data2
+  n = length(data)
+  d = mean(data)
+  t = qt(1 - alpha/2, n-1)
+  s = sd(data)
+  
+  lower = d - t*s/sqrt(n)
+  upper = d + t*s/sqrt(n)
+  
+  ci = c(lower, upper)
+  ci
+}
+```
+
+A 95% confidence interval for the two exams is below:
+```{r}
+dep_mean_ci(Exam1, Exam2, 0.05)
+```
+
+This means student grades increased on average from Exam 1 to Exam 2. Maybe they studied more this time.   
+
+Here are some intervals using `t.test` for the same data:   
+
+Exam difference:
+```{r}
+exam_diff = Exam1 - Exam2
+```
+
+For 90%
+```{r}
+t.test(exam_diff, conf.level = 0.90)$conf.int
+```
+
+For 80%
+```{r}
+t.test(exam_diff, conf.level = 0.80)$conf.int
+```
+
+For 70%
+```{r}
+t.test(exam_diff, conf.level = 0.70)$conf.int
+```
+
+For 60%
+```{r}
+t.test(exam_diff, conf.level = 0.60)$conf.int
+```
+
+For 10%
+```{r}
+t.test(exam_diff, conf.level = 0.10)$conf.int
+```
+
+# Task 5
+
+Loading in the data set for NZ Birds:
+```{r}
+nzbirds = read.csv("NZBIRDS.csv")
+head(nzbirds)
+length(nzbirds$Species)
+```
+
+Verifying the table:
+```{r}
+tab = with(nzbirds, table(Extinct, Flight))
+addmargins(tab)
+```
+
+A 95% confidence interval for the proportions is calculated below:
+```{r}
+p1 = 21 / 38
+p2 = 7 / 78
+n1 = 38
+n2 = 78
+q1 = 1-p1
+q2 = 1-p2
+n1*p1
+n1*q1
+n2*p2
+n2*q2
+```
+
+So this qualifies for $n\hat{p} > 4$ and $n\hat{q} > 4$. So:
+
+```{r}
+alpha = 0.05
+z = qnorm(1-alpha/2)
+z
+lower = (p1 - p2) - z*sqrt((p1*q1/n1) + (p2*q2/n2))
+upper = (p1 - p2) + z*sqrt((p1*q1/n1) + (p2*q2/n2))
+ci = c(lower, upper)
+ci
+```
+
+# Task 6
+
+Here's some randomly generated data
+```{r}
+set.seed(35)
+sam1=rnorm(25,mean=10,sd=5)
+
+set.seed(45)
+sam2=rnorm(34,mean=40,sd=8)
+```
+
+The 95% confidence interval for the ratio of variances is found below:
+
+```{r}
+s1 = var(sam1)
+s2 = var(sam2)
+F1 = qf(1-0.05/2, df1 = 24, df2 = 33)
+F2 = qf(1-0.05/2, df1 = 33, df2 = 24)
+
+lower = s1/(F1*s2)
+upper = s1*F2/s2
+
+ci = c(lower, upper)
+ci
+```
+
+For the variances of the samples we can form confidence intervals using `var.test()`.  
+
+For 80%:
+```{r}
+var.test(sam1, sam2, conf.level = 0.8)$conf.int
+```
+
+For 70%:
+```{r}
+var.test(sam1, sam2, conf.level = 0.7)$conf.int
+```
+
+For 60%:
+```{r}
+var.test(sam1, sam2, conf.level = 0.6)$conf.int
+```
+
+For 50%:
+```{r}
+var.test(sam1, sam2, conf.level = 0.5)$conf.int
+```
+
+# Task 7
+
+```{r}
+library(JKleiberPkg)
+set.seed(23)
+x = rnorm(30, mean=10, sd=12)
+JKleiberPkg::myci(x)
+```
+

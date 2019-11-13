@@ -2800,7 +2800,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Assignment 3</h1>
 <h4 class="author">Justin Kleiber</h4>
-<h4 class="date">Monday, October 14, 2019</h4>
+<h4 class="date">Thursday, October 17, 2019</h4>
 
 </div>
 
@@ -3111,30 +3111,73 @@ p1x%*%p2y</code></pre>
 <h2>Q14</h2>
 <pre class="r"><code>leadcopp = read.csv(&quot;LEADCOPP.csv&quot;)</code></pre>
 <ol style="list-style-type: lower-alpha">
-<li>The interval can be found from the sample in R using <code>qnorm</code> to find the Z value <span class="math inline">\(z_{0.005}\)</span>:</li>
+<li>The interval can be found from the sample in R using <code>qt</code></li>
 </ol>
 <pre class="r"><code>lead_mean = mean(leadcopp$LEAD)
-lead_mean</code></pre>
-<pre><code>## [1] 2.8856</code></pre>
-<pre class="r"><code>lead_sd = sd(leadcopp$LEAD)
-lead_sd</code></pre>
-<pre><code>## [1] 3.924775</code></pre>
-<pre class="r"><code>z005 = qnorm(0.005, mean = lead_mean, sd = lead_sd)
-z005</code></pre>
-<pre><code>## [1] -7.223951</code></pre>
-<pre class="r"><code>lower = lead_mean - z005*lead_sd/sqrt(10)
-upper = lead_mean + z005*lead_sd/sqrt(10)
+lead_sd = sd(leadcopp$LEAD)
+n = length(leadcopp$LEAD)
+alpha = 0.01
+t = qt(1-alpha/2, n - 1)
+mp = c(-1, 1)
 
-lower</code></pre>
-<pre><code>## [1] 11.85141</code></pre>
-<pre class="r"><code>upper</code></pre>
-<pre><code>## [1] -6.08021</code></pre>
+ci = lead_mean + mp*t*lead_sd/sqrt(n)
+ci</code></pre>
+<pre><code>## [1] -1.147845  6.919045</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Similarly, we can find the interval for the copper mean:</li>
+</ol>
+<pre class="r"><code>copp_mean = mean(leadcopp$COPPER)
+copp_sd = sd(leadcopp$COPPER)
+n = length(leadcopp$COPPER)
+alpha = 0.01
+t = qt(1-alpha/2, n - 1)
+mp = c(-1, 1)
+
+ci = copp_mean + mp*t*copp_sd/sqrt(n)
+ci</code></pre>
+<pre><code>## [1] 0.1518726 0.6647274</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>For lead, there is a 99% probability that the population mean is less than 6.92 (lead levels cannot be negative). For copper, there is a 99% probability that the mean level is between 0.1519 and 0.6647.</p></li>
+<li><p>99% confidence means that 99% of sample means will fall inside the interval.</p></li>
+</ol>
 </div>
 <div id="q15" class="section level2">
 <h2>Q15</h2>
+<pre class="r"><code>solar = read.csv(&quot;SOLARAD.csv&quot;)
+
+# Difference between the solar irradiation levels
+diff = solar$STJOS - solar$IOWA
+
+# CI
+alpha = 0.05
+n = length(diff)
+t = qt(1-alpha/2, n - 1)
+mp = c(-1, 1)
+ci = mean(diff) + mp*sd(diff)*t/sqrt(n)
+ci</code></pre>
+<pre><code>## [1] 156.8193 239.1807</code></pre>
+<p>This means that 95% of the sample means for solar irradiation will fall inside this interval, based on this sample.</p>
 </div>
 <div id="q16" class="section level2">
 <h2>Q16</h2>
+<ol style="list-style-type: lower-alpha">
+<li>The sample is analyzed to produce a 90% confidence interval below:</li>
+</ol>
+<pre class="r"><code>diazinon = read.csv(&quot;DIAZINON.csv&quot;)
+diff = diazinon$DAY - diazinon$NIGHT
+
+# CI
+alpha = 0.1
+mp = c(-1, 1)
+n = length(diff)
+t = qt(1 - alpha/2, n - 1)
+ci = mean(diff) + mp*t*sd(diff)/sqrt(n)
+ci</code></pre>
+<pre><code>## [1] -58.89917 -18.91901</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>We assume that the distribution of the differences is normal</p></li>
+<li><p>The researchers should conclude that the day has far less average diazinon than the night. This is because the confidence interval shows that 90% of samples will be negative, indicating the day has lower levels across many samples.</p></li>
+</ol>
 </div>
 </div>
 

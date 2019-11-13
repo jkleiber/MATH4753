@@ -320,32 +320,74 @@ c) Using the table on page 998, for n=20, p=0.4: At k = 1, the probability is 0.
 leadcopp = read.csv("LEADCOPP.csv")
 ```
 
-a) The interval can be found from the sample in R using `qnorm` to find the Z value $z_{0.005}$:
+a) The interval can be found from the sample in R using `qt`
 ```{r}
 lead_mean = mean(leadcopp$LEAD)
-lead_mean
 lead_sd = sd(leadcopp$LEAD)
-lead_sd
-z005 = qnorm(0.005, mean = lead_mean, sd = lead_sd)
-z005
+n = length(leadcopp$LEAD)
+alpha = 0.01
+t = qt(1-alpha/2, n - 1)
+mp = c(-1, 1)
 
-lower = lead_mean - z005*lead_sd/sqrt(10)
-upper = lead_mean + z005*lead_sd/sqrt(10)
-
-lower
-upper
+ci = lead_mean + mp*t*lead_sd/sqrt(n)
+ci
 ```
 
+b) Similarly, we can find the interval for the copper mean:
+```{r}
+copp_mean = mean(leadcopp$COPPER)
+copp_sd = sd(leadcopp$COPPER)
+n = length(leadcopp$COPPER)
+alpha = 0.01
+t = qt(1-alpha/2, n - 1)
+mp = c(-1, 1)
 
+ci = copp_mean + mp*t*copp_sd/sqrt(n)
+ci
+```
+
+c) For lead, there is a 99% probability that the population mean is less than 6.92 (lead levels cannot be negative). For copper, there is a 99% probability that the mean level is between 0.1519 and 0.6647.
+
+d) 99% confidence means that 99% of sample means will fall inside the interval.
 
 
 ## Q15
+```{r}
+solar = read.csv("SOLARAD.csv")
 
+# Difference between the solar irradiation levels
+diff = solar$STJOS - solar$IOWA
+
+# CI
+alpha = 0.05
+n = length(diff)
+t = qt(1-alpha/2, n - 1)
+mp = c(-1, 1)
+ci = mean(diff) + mp*sd(diff)*t/sqrt(n)
+ci
+```
+
+This means that 95% of the sample means for solar irradiation will fall inside this interval, based on this sample.
 
 
 ## Q16
+a) The sample is analyzed to produce a 90% confidence interval below:
+```{r}
+diazinon = read.csv("DIAZINON.csv")
+diff = diazinon$DAY - diazinon$NIGHT
 
+# CI
+alpha = 0.1
+mp = c(-1, 1)
+n = length(diff)
+t = qt(1 - alpha/2, n - 1)
+ci = mean(diff) + mp*t*sd(diff)/sqrt(n)
+ci
+```
 
+b) We assume that the distribution of the differences is normal
+
+c) The researchers should conclude that the day has far less average diazinon than the night. This is because the confidence interval shows that 90% of samples will be negative, indicating the day has lower levels across many samples.
 
 
 

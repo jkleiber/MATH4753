@@ -1,0 +1,331 @@
+---
+title: "MATH 4753 Project 2"
+author: "Justin Kleiber"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: show
+    csl: biomed-central.csl
+    df_print: paged
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    number_sections: yes
+    theme: journal
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: 4
+  pdf_document:
+    df_print: kable
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    toc: yes
+    toc_depth: 4
+always_allow_html: yes
+bibliography: project.bib
+abstract: This project is all about applications of SLR to real data using R
+---
+
+<center>
+
+![Justin Kleiber](justin.jpg "Justin Kleiber"){ width=20% }
+
+</center>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(dplyr)
+```
+
+# My Video
+
+<!--
+<video width="320" height="240" controls>
+  <source src="usingvideoinrmd.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video> -->
+
+
+# Introduction
+
+When applying for jobs, applicants are often asked about their desired salary, or their salary history. This is a tactic called "anchoring", where a potential employer tries to pin the future salary negotiations with the applicant to a low value in order to pay the lowest possible price for future labor (@KAHNEMAN1992296). Research studies have shown that such an approach influences negotiations, even if the anchor point is extreme (@thorsteinson).
+
+Asking about salary history in particular has negative outcomes for women, leading some <a href = "https://www.nytimes.com/2018/05/01/upshot/how-a-common-interview-question-fuels-the-gender-pay-gap-and-how-to-stop-it.html">cities, states and companies to outlaw the question entirely </a> during the interview stages. Furthermore, it has been shown that women, who generally participate less in salary negotiations than their male counterparts, become more likely to negotiate their salary when armed with information about what they deserve to earn (@douglas2015availability).   
+
+By applying simple linear regression to a given salary data set, it is predicted that such a model can accurately predict salary based on the amount of work experience an employee has. This model then can be used by the employee to achieve a more favorable outcome during salary negotiations, as a reasonable salary estimate can be predicted.  
+
+
+## Variables
+
+The two variables of interest are years of experience, and the salary earned. Both of these variables are quantitative. Salary is measured in US Dollars and the experience is measured in years to one decimal place.
+
+```{r salarydata}
+salary = read.csv("Salary_Data.csv")
+
+library(DT)
+datatable(
+  salary,filter = 'top', options = list(
+  pageLength = 5, autoWidth = TRUE, editable = TRUE, dom = 'Bfrtip',
+    buttons = c('copy', 'csv', 'excel', 'pdf', 'print')),
+caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table 2: ', htmltools::em('This is a simple caption for the table.')
+  )
+) %>%
+  formatStyle('Salary',  color = 'red', backgroundColor = 'orange', fontWeight = 'bold')
+
+
+```
+
+
+### Plot
+
+```{r carcharacteristics, fig.height = 5, fig.cap = "salary",fig.align='center',fig.cap="Graph of data with loess smoother"}
+library(ggplot2)
+g = ggplot(salary, aes(x = YearsExperience, y = Salary)) + geom_point()
+g = g + geom_smooth(method = "loess")
+g
+```
+
+
+## Data Collection
+
+The salary data was sourced from <a href="http://kaggle.com">Kaggle</a>, a data science website with many interesting data sets.
+
+## Reason For Collection
+
+This data was originally collected to compare the salaries of many professionals, each at different career stages.
+
+## Interest
+
+This data provides an opportunity to study the efficacy of simple linear regression in predicting a worker's salary before the worker goes into salary negotiations.
+
+## Problem
+
+Employers frequently attempt to exploit employees by anchoring salary negotiations to an employee's past rather than considering the employee's current career stage. 
+
+## Hypothesis
+
+Simple linear regression can be used to provide job applicants and current employees with accurate salary information, with which they can use to better negotiate their own salary.
+
+# Theory needed to carry out SLR
+
+A linear combination is a weighted composition of potentially many variables, as shown below. 
+
+$$
+y = \beta_0 + \beta_1x_1 + ...+\beta_nx^n = \sum_{i=0}^n{\beta_ix^i}
+$$
+
+From @ch14, and the equation for a linear combination, it is determined that the output, $y_i$, of a linear model given a single input variable, $x_i$, is as follows:
+
+$$
+y_i = \beta_0 + \beta_1x_i + \epsilon_i
+$$
+
+Where $\epsilon_i$ represents the error of the model. This equation is known as the regression line. This equation can be used to find the expected value of $y_i$ given the input variable $x_i$. More formally:
+
+$$
+\begin{eqnarray}
+E(y_i | x_i) &=& E(\beta_0 + \beta_1x_i + \epsilon_i)\\
+E(y_i | x_i) &=& E(\beta_0) + E(\beta_1x_i) + E(\epsilon_i)\\
+E(y_i | x_i) &=& \beta_0 + \beta_1x_i\\
+\end{eqnarray}
+$$
+
+which aligns with the equation for a linear combination. However, this derivation relies on the assumption that $\epsilon_i ~ N(0, \sigma^2)$. In other words, the error of the model must be normally distributed with a mean of zero in order to be perfect. As most models are not perfect, they must be validated to see how well they fit the given data.
+
+
+# Validity of Model
+
+A linear model of the salary data is constructed using the following R code
+```{r}
+salary.lm = lm(Salary~YearsExperience, data = salary)
+```
+
+This model will undergo a variety of methods to confirm its validity in delivering a prediction about salary data.
+
+## Straight trendline verification  
+
+One assumption of simple linear regression with one input variable is that the model should be a straight line. This assumption is verified using `trendscatter`
+
+```{r}
+# Load the s20x library and make three trendline scatter plots
+library(s20x)
+layout(matrix(1:3, nrow = 3, ncol = 1))
+trendscatter(Salary~YearsExperience, f = 0.5, data = salary)
+trendscatter(Salary~YearsExperience, f = 0.7, data = salary)
+trendscatter(Salary~YearsExperience, f = 0.9, data = salary)
+```
+
+From the `trendscatter` function calls above and the plots they output, the assumption that the trendline is straight is reasonable.
+
+## Normally Distributed Errors 
+
+For the model to work, the errors in the model need to be distributed normal, as shown below.
+
+$$\epsilon_i \sim N(0,\sigma^2)$$
+
+This section will seek to prove the normal distribution of the error using the Shapiro-Wilk test.
+
+### Shapiro-Wilk Test
+
+To perform the shapiro-wilk test on the errors, the `normcheck` function in R is employed:
+
+```{r}
+# Test the normality of the linear model
+normcheck(salary.lm, shapiro.wilk = TRUE)
+```
+
+As the null-hypothesis of this particular Shapiro-Wilk test is that the error is normally distributed, and the p-value returned by the `normcheck` function is much greater than 0.05, it is reasonable to accept the null hypothesis as plausible. Therefore, the error being normally distributed is plausible.
+
+## Constant Variance Verification
+
+To show the constant variance of the error, the residuals must be plotted against the fitted values generated by the model. First the residuals and the fitted values are found using R:
+```{r}
+# Residuals
+salary.res = residuals(salary.lm)
+
+# Fitted values
+salary.fit = fitted(salary.lm)
+```
+
+Then, the fitted values of the model and the residuals are plotted against each other
+
+```{r}
+# Plot residuals vs fitted values
+plot(salary.fit, salary.res)
+trendscatter(salary.fit, salary.res, f = 0.9)
+```
+
+This shows that the variance of the error is near constant, which will make the model much more accurate.
+
+## Zero mean value of $\epsilon$
+
+The mean value of the errors must be zero for the model to be valid. The mean of the errors can be found by first finding the residuals, and then finding the mean of the residuals.
+
+```{r}
+salary.res = residuals(salary.lm)
+mean(salary.res)
+```
+
+As shown, the mean of the residuals is very close to 0. In fact, if floating point precision error in computers is considered, this value is zero.
+
+## Data Independence
+
+To show independence of the data, the residuals are plotted against the fitted values to show the lack of relationship
+
+```{r}
+plot(salary.lm, which = 1)
+```
+
+The above plot shows that the model misses some parts of the trend in the overall data. Despite this, the model will still likely be usable and effective.
+
+
+# Model selection if you compared models 
+
+## Use adjusted $R^2$ 
+$$R_{adj}^2 =$$
+
+
+
+
+
+# Analysis of the data
+
+## Make sure you include many great plots
+
+## Add the trend to the data
+
+
+## Summary lm object
+```{r}
+summary(salary.lm)
+```
+
+
+### Interpretation of all tests
+### Interpretation of multiple R squared
+### Interpretation of all point estimates
+## Calculate cis for $\beta$ parameter estimates
+### Use of `predict()`
+```{r}
+predict(salary.lm, data.frame(YearsExperience=c(1,6,10)))
+```
+
+### Use of `ciReg()`
+```{r}
+ciReg(salary.lm)
+```
+
+
+### Check on outliers using cooks plots
+
+Remember to interpret this plot and all other plots
+
+```{r}
+cooks20x(salary.lm)
+```
+
+
+# Conclusion
+## Answer your research question
+## Suggest ways to improve model or experiment
+
+
+The following function was taken from [https://rpubs.com/therimalaya/43190](https://rpubs.com/therimalaya/43190)
+
+```{r, include=FALSE}
+require(ggplot2)
+diagPlot<-function(model){
+    p1<-ggplot(model, aes(.fitted, .resid))+geom_point()
+    p1<-p1+stat_smooth(method="loess")+geom_hline(yintercept=0, col="red", linetype="dashed")
+    p1<-p1+xlab("Fitted values")+ylab("Residuals")
+    p1<-p1+ggtitle("Residual vs Fitted Plot")+theme_bw()
+    
+    p2<-ggplot(model, aes(qqnorm(.stdresid)[[1]], .stdresid))+geom_point(na.rm = TRUE)
+    p2<-p2+geom_abline(aes(qqline(.stdresid)))+xlab("Theoretical Quantiles")+ylab("Standardized Residuals")
+    p2<-p2+ggtitle("Normal Q-Q")+theme_bw()
+    
+    p3<-ggplot(model, aes(.fitted, sqrt(abs(.stdresid))))+geom_point(na.rm=TRUE)
+    p3<-p3+stat_smooth(method="loess", na.rm = TRUE)+xlab("Fitted Value")
+    p3<-p3+ylab(expression(sqrt("|Standardized residuals|")))
+    p3<-p3+ggtitle("Scale-Location")+theme_bw()
+    
+    p4<-ggplot(model, aes(seq_along(.cooksd), .cooksd))+geom_bar(stat="identity", position="identity")
+    p4<-p4+xlab("Obs. Number")+ylab("Cook's distance")
+    p4<-p4+ggtitle("Cook's distance")+theme_bw()
+    
+    p5<-ggplot(model, aes(.hat, .stdresid))+geom_point(aes(size=.cooksd), na.rm=TRUE)
+    p5<-p5+stat_smooth(method="loess", na.rm=TRUE)
+    p5<-p5+xlab("Leverage")+ylab("Standardized Residuals")
+    p5<-p5+ggtitle("Residual vs Leverage Plot")
+    p5<-p5+scale_size_continuous("Cook's Distance", range=c(1,5))
+    p5<-p5+theme_bw()+theme(legend.position="bottom")
+    
+    p6<-ggplot(model, aes(.hat, .cooksd))+geom_point(na.rm=TRUE)+stat_smooth(method="loess", na.rm=TRUE)
+    p6<-p6+xlab("Leverage hii")+ylab("Cook's Distance")
+    p6<-p6+ggtitle("Cook's dist vs Leverage hii/(1-hii)")
+    p6<-p6+geom_abline(slope=seq(0,3,0.5), color="gray", linetype="dashed")
+    p6<-p6+theme_bw()
+    
+    return(list(rvfPlot=p1, qqPlot=p2, sclLocPlot=p3, cdPlot=p4, rvlevPlot=p5, cvlPlot=p6))
+}
+```
+
+
+Diagnostic plots for the linear model are shown below using the `diagPlot` function above
+
+```{r}
+#diagPlot(salary.lm)
+```
+
+
+# References
+  
