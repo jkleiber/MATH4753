@@ -20,3 +20,7 @@ A plot of the probability density function and the calculation P(X < a)
 This function plots a normal probability distribution
 and highlights the density for P(X < a)
 }
+\examples{
+myncurve(mu = 10, sigma = 4, a = 6)
+
+}

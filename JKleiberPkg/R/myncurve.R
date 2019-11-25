@@ -10,7 +10,7 @@
 #' @return A plot of the probability density function and the calculation P(X < a)
 #' @export
 #'
-#' @example myncurve(mu = 10, sigma = 4, a = 6)
+#' @examples myncurve(mu = 10, sigma = 4, a = 6)
 #'
 myncurve = function(mu = 0, sigma = 1, a = 0){
   curve(dnorm(x,mean=mu,sd=sigma), xlim = c(mu-3*sigma, mu+3*sigma))

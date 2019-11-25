@@ -7,7 +7,7 @@
 #' @return An equation for the quadratic trendline
 #' @export
 #'
-#' @example quadraticTrendline(quad.lm)
+#' @examples quadraticTrendline(quad.lm)
 #'
 quadraticTrendline <- function(model)
 {

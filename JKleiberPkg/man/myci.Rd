@@ -17,3 +17,7 @@ confidence interval
 \description{
 Function for finding the confidence interval of the mean
 }
+\examples{
+myci(1:10, 0.05)
+
+}

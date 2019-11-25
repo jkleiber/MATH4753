@@ -17,3 +17,7 @@ Plots a dot plot of the data points, highlighting outliers
 \description{
 This function plots data points, outliers, and potential outliers in a dot plot
 }
+\examples{
+plotOutliers(x)
+
+}

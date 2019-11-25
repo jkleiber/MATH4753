@@ -23,3 +23,7 @@ A violin plot of the data
 \description{
 This function makes violin plots using ggplot2
 }
+\examples{
+violin(ddt$RIVER, ddt$LENGTH, ddt$SPECIES, "Violin Plot")
+
+}

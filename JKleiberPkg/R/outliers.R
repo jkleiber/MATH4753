@@ -8,7 +8,7 @@
 #' @return Plots a dot plot of the data points, highlighting outliers
 #' @export
 #'
-#' @example plotOutliers(x)
+#' @examples plotOutliers(x)
 #'
 plotOutliers <- function(x, title = "", col = c("Red", "Blue", "Black"))
 {

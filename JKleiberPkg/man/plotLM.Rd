@@ -23,3 +23,8 @@ A plot of the linear model
 \description{
 Plots a straight line linear model with scatter plot
 }
+\examples{
+plotLM(spruce.df, spruce.df$BHDiameter, spruce.df$Height, spruce.df$BHDiameter, "Height vs Diameter")
+
+
+}

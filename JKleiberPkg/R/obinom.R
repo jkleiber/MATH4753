@@ -8,7 +8,7 @@
 #' @return A dataframe with the probabilities of the number of successes for each possible number of successes
 #' @export
 #'
-#' @example obinom()
+#' @examples obinom()
 #'
 obinom = function(size=10, p = 0.5) {
   prob = c()

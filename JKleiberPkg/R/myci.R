@@ -8,7 +8,7 @@
 #' @return confidence interval
 #'
 #' @export
-#' @example myci(1:10, 0.05)
+#' @examples myci(1:10, 0.05)
 #'
 myci = function(data, alpha=0.05){
   s = sd(data)

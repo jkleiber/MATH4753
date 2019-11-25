@@ -23,3 +23,7 @@ a plot of the sample data, along with statistic of interest, point estimate, and
 \description{
 This function uses bootstrapping to approximate properties of a population
 }
+\examples{
+myboot2(x = sam, alpha = 0.01)
+
+}

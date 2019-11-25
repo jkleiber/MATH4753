@@ -1,0 +1,154 @@
+---
+title: "Lab 13: MATH 4753"
+author: "Justin Kleiber"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: spacelab
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+
+First, the working directory is confirmed
+
+```{r}
+getwd()
+```
+
+# Task 2
+
+```{r}
+set.seed(13)
+x=rnorm(40,mean=15,sd=5)# 1
+
+set.seed(20)
+y=rnorm(35,mean=10,sd=4)# 2
+
+var.test(x,y)# 3
+```
+
+- The population variances are not equal.  
+- `var.test()` shows that the variances may be equal. The null hypothesis that the ratio is 1 is plausible, by inspection of the confidence interval and the p-value.    
+
+For the difference in means:
+- The null hypothesis is that $\mu_x - \mu_y > 0$, and the alternate is that $\mu_x - \mu_y \le 0$  
+- Running a one-sided t test is the best way to see if this is true:
+
+```{r}
+t.test(x, y, alt = c("less"))
+```
+
+The 95% confidence interval is $(-Inf, 7.091501)$. This means it is plausible that $\mu_x > \mu_y$ because the null hypothesis is represented in the interval.
+
+```{r}
+set.seed(20)
+y=rnorm(35,mean=14,sd=4)# 2
+t.test(x, y, alt = "greater")
+```
+
+This p-value indicates that there is support for the null hypothesis that x has a lesser mean than y. Similarly, the confidence interval shows that the difference in the means could be less than 0, which supports the same hypothesis.
+
+
+# Task 3
+
+Here is some standard sample data:
+```{r}
+set.seed(50); x=rnorm(30,mean=50, sd=10)
+set.seed(40); y=rnorm(40,mean=55, sd=20)
+```
+
+The following tests test the variance ratios of the samples:
+```{r}
+t1 = var.test(x,y) #1
+t2 = var.test(y,x) #2
+
+t1
+t2
+```
+
+As shown in the output above, the p-values of these tests are equal. The confidence intervals for both tests indicate the same information to be true. This can be seen by taking the reciprocal of the bounds of line 1 and comparing them to line 2's result:
+
+```{r}
+1 / t1$conf.int[1]
+1 / t1$conf.int[2]
+```
+
+These values are identical, the ratio is just flipped due to the flipping of the tests. Similarly for the F statistic, the degrees of freedom have been flipped:
+
+```{r}
+1/t1$statistic
+```
+
+As shown above, the F stat is the same, just with an inverse relationship.
+
+
+```{r}
+var.test(x,y,alt="less")#3
+var.test(y,x,alt="greater")#4
+```
+
+Based on these tests, it is likely that the variance of y is greater than the variance of x. The null hypothesis is rejected in both cases (the p-value is very low and the confidence interval does not include anything to contradict the alternate), which shows that when x is the numerator the ratio is less than 1, and when y is the numerator, the ratio is greater.  
+
+- The F values are related inversely - this is shown above.
+- The p-value for each test is the same even with the change in alternate.
+- The confidence intervals are related inversely, with the added twist that the lower bound on 3 is related to the upper bound on 4. Similarly, the upper bound on 3 is related to the lower bound of 4. This owes to the change in alternate.
+
+
+# Task 4
+- Conjugate distributions are when the posterior and the prior are in the same distribution family    
+- The posterior would be another beta function with new hyperparameters.  
+- The hyperparameters are $\alpha = 1 + 4 = 5$ and $\beta = 1 + 6 = 7$. So the posterior is distributed as $\beta(5, 7)$  
+
+The moment estimate is derived below:
+$$
+\hat \theta = E(\theta|X) = \frac{x}{n}= \frac{4}{10}
+$$
+
+- mean of the posterior:
+$$
+\hat \theta = E(\theta|X) = \frac{x + \alpha}{n + \alpha + \beta}= \frac{4 + 1}{10 + 1 + 1} = \frac{5}{12}
+$$
+
+So the moment estimate using classical statistics is slightly less than the estimate using Bayesian statistics. For higher values of n, this converges to be the same.  
+
+- 95% interval:
+```{r}
+upper = qbeta(1-0.05/2, 1, 1)
+lower = qbeta(0.05/2, 1, 1)
+c(lower, upper)
+```
+
+- confidence interval for the moment estimate:
+```{r}
+that = 5 / 12
+qq = qnorm(1-0.05, 0, 1)*sqrt((that * (1-that))/10)
+lower = that - qq
+upper = that + qq
+c(lower, upper)
+```
+
+The confidence interval for the bayesian model is narrow compared to the classical model and shifted a little bit.
+
+# Task 5
+```{r}
+data = read.csv("INVQUAD.csv")
+head(data)
+tt=t.test(INV.QUAD ~ PLANT,mu=0, data=data)
+obj = t.test(INV.QUAD ~ PLANT, conf.level=1-5/100, mu=0, data=data)
+
+plot(INV.QUAD ~ PLANT,main=paste("Pvalue = ", round(obj$p.value,4 )), 
+     col = c("Blue","Green"), data)
+elec = data[data$PLANT == "Electric", ]
+gas = data[data$PLANT == "Gas", ]
+abline(mean(elec$INV.QUAD) - mean(gas$INV.QUAD), 0, col="Purple", lwd=3)
+```
+
+
+

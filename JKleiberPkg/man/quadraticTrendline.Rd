@@ -15,3 +15,7 @@ An equation for the quadratic trendline
 \description{
 Finds the equation for a quadratic trendline
 }
+\examples{
+quadraticTrendline(quad.lm)
+
+}

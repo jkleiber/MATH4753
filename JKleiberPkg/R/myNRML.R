@@ -11,7 +11,7 @@
 #' @return Plot of the
 #' @export
 #'
-#' @example myNRML(0, log(dbinom(3, 5, 0.3)), c(0, 1))
+#' @examples myNRML(0, log(dbinom(3, 5, 0.3)), c(0, 1))
 #'
 myNRML=function(x0,delta=0.001,llik,xrange,parameter="param"){
   f=function(x) (llik(x+delta)-llik(x))/delta

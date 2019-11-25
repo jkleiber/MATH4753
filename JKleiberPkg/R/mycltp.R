@@ -9,7 +9,7 @@
 #' @return plots of the sampled distribution with comparisons to the normal
 #' @export
 #'
-#' @example mycltp(20, 10000, lambda=4)
+#' @examples mycltp(20, 10000, lambda=4)
 #'
 #'
 mycltp=function(n,iter,lambda=10,...){

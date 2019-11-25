@@ -11,7 +11,7 @@
 #'
 #' @export
 #'
-#' @example myboot2(x = sam, alpha = 0.01)
+#' @examples myboot2(x = sam, alpha = 0.01)
 #'
 myboot2<-function(iter=10000,x,fun="mean",alpha=0.05,cx=1.5,...){
   n=length(x)   #sample size

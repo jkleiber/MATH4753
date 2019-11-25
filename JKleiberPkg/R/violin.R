@@ -11,7 +11,7 @@
 #' @return A violin plot of the data
 #' @export
 #'
-#' @example violin(ddt$RIVER, ddt$LENGTH, ddt$SPECIES, "Violin Plot")
+#' @examples violin(ddt$RIVER, ddt$LENGTH, ddt$SPECIES, "Violin Plot")
 #'
 violin <- function(data, x_val, y_val, fill_col, title)
 {

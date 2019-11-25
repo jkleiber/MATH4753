@@ -11,7 +11,7 @@
 #' @return A plot of the linear model
 #' @export
 #'
-#' @example plotLM(spruce.df, spruce.df$BHDiameter, spruce.df$Height, spruce.df$BHDiameter, "Height vs Diameter")
+#' @examples plotLM(spruce.df, spruce.df$BHDiameter, spruce.df$Height, spruce.df$BHDiameter, "Height vs Diameter")
 #'
 #'
 plotLM <- function(data, x_val, y_val, col, title)

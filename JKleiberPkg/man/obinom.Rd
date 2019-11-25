@@ -17,3 +17,7 @@ A dataframe with the probabilities of the number of successes for each possible 
 \description{
 This function returns the probability for numbers of successes in a binomial distribution
 }
+\examples{
+obinom()
+
+}

@@ -19,3 +19,8 @@ plots of the sampled distribution with comparisons to the normal
 \description{
 Samples a poisson distribution multiple times in order to approximate the central limit theorem.
 }
+\examples{
+mycltp(20, 10000, lambda=4)
+
+
+}

@@ -419,3 +419,34 @@ Similar to Task 4, bootstrapping finds that it is possible to reject the null hy
 
 # Task 7
 
+Here is some R code:
+
+```{r, eval=FALSE}
+t.test(x1,mu=23) # A
+        One Sample t-test # B
+data:  x1
+t = 2.3563, df = 29, p-value = 0.02543 # C
+alternative hypothesis: true mean is not equal to 23 #D
+95 percent confidence interval: #E
+23.30198 27.27320 #F
+sample estimates:
+mean of x 
+25.28759 #G
+```
+
+- Line A performs a one sample t-test with a null hypothesis that $\mu = 23$.
+- Line B is the output title of the t test
+- Line C shows the $t_{calc}$ value, the degrees of freedom, and the p-value.
+- Line D shows the alternate hypothesis, that is $\mu \ne 23$
+- Line E shows that a 95% confidence interval was calculated
+- Line F displays that confidence interval
+- Line G shows the point estimate, the mean of the sample.
+
+# Task 8
+
+```{r}
+library(JKleiberPkg)
+val = JKleiberPkg::bootpval(rnorm(30, 0, 1))
+```
+
+

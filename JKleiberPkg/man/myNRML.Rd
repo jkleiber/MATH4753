@@ -23,3 +23,7 @@ Plot of the
 \description{
 Estimates the likelihood of a parameter
 }
+\examples{
+myNRML(0, log(dbinom(3, 5, 0.3)), c(0, 1))
+
+}
